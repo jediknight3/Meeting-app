@@ -64,7 +64,6 @@ html, body {
 .btn-sm { padding: 7px 13px; font-size: 13px; }
 .btn-full { width: 100%; }
 .btn:disabled { opacity: .45; cursor: not-allowed; }
-/* Record */
 #record-area { display: flex; flex-direction: column; align-items: center; padding: 32px 0 20px; }
 #record-btn {
   width: 100px; height: 100px; border-radius: 50%; border: none;
@@ -84,7 +83,6 @@ html, body {
 @keyframes wave { 0%,100%{height:6px;opacity:.4} 50%{height:20px;opacity:1} }
 #wave-indicator { display: none; align-items: flex-end; height: 24px; margin-top: 8px; }
 #wave-indicator.active { display: flex; }
-/* Processing */
 .progress-step { display: flex; align-items: center; gap: 12px; padding: 11px 0; border-bottom: 1px solid var(--border); }
 .progress-step:last-child { border-bottom: none; }
 .step-icon { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
@@ -95,13 +93,10 @@ html, body {
 @keyframes spin { to { transform: rotate(360deg); } }
 .step-label { font-size: 14px; font-weight: 600; }
 .step-desc  { font-size: 12px; color: var(--sub); margin-top: 1px; }
-/* Transcript */
-.transcript-box { background: var(--gray-50); border-radius: var(--radius-m); padding: 14px; max-height: 260px; overflow-y: auto; font-size: 13px; color: var(--gray-700); line-height: 1.8; white-space: pre-wrap; word-break: break-word; }
-/* Speaker bubble style inside transcript */
-.spk-line { margin-bottom: 8px; }
-.spk-name { font-size: 11px; font-weight: 700; color: var(--primary); margin-bottom: 2px; }
+.transcript-box { background: var(--gray-50); border-radius: var(--radius-m); padding: 14px; max-height: 280px; overflow-y: auto; }
+.spk-line { margin-bottom: 10px; }
+.spk-name { font-size: 11px; font-weight: 700; color: var(--primary); margin-bottom: 3px; }
 .spk-text { background: #fff; border-radius: var(--radius-s); padding: 8px 10px; box-shadow: var(--shadow-s); font-size: 13px; line-height: 1.7; color: var(--gray-700); }
-/* Markdown */
 .md-body { font-size: 14px; line-height: 1.85; }
 .md-body h1 { font-size: 20px; font-weight: 700; margin: 6px 0 10px; }
 .md-body h2 { font-size: 16px; font-weight: 700; margin: 18px 0 8px; padding-bottom: 5px; border-bottom: 1.5px solid var(--border); }
@@ -115,7 +110,6 @@ html, body {
 .md-body hr { border: none; border-top: 1px solid var(--border); margin: 14px 0; }
 .md-body strong { font-weight: 700; color: var(--text); }
 .md-body code { background: var(--gray-100); padding: 1px 5px; border-radius: 4px; font-size: 12px; }
-/* Meeting List */
 .meeting-item {
   background: var(--card); border-radius: var(--radius-l); padding: 14px 16px;
   margin-bottom: 10px; cursor: pointer; transition: all .15s;
@@ -162,9 +156,10 @@ html, body {
 .tab.active { background: #fff; color: var(--text); box-shadow: var(--shadow-s); }
 #minutes-edit { width: 100%; min-height: 420px; padding: 14px; border: 1.5px solid var(--border); border-radius: var(--radius-m); font-size: 13px; line-height: 1.75; resize: vertical; font-family: 'Courier New', monospace; outline: none; background: var(--gray-50); color: var(--text); transition: border-color .15s; }
 #minutes-edit:focus { border-color: var(--primary); background: #fff; }
-.alert { padding: 12px 14px; border-radius: var(--radius-m); margin-bottom: 12px; font-size: 13px; }
+.alert { padding: 12px 14px; border-radius: var(--radius-m); margin-bottom: 10px; font-size: 13px; }
 .alert-info  { background: var(--primary-l); color: #1E3A8A; border-left: 3px solid var(--primary); }
 .alert-green { background: var(--green-l);   color: #065F46; border-left: 3px solid var(--green); }
+.alert-orange { background: var(--orange-l); color: #92400E; border-left: 3px solid var(--orange); }
 #pdf-content { position: fixed; left: -9999px; top: 0; width: 794px; background: #fff; padding: 50px; font-size: 13px; line-height: 1.85; display: none; }
 @media (min-width: 480px) { #app { box-shadow: 0 0 60px rgba(0,0,0,.1); } }
 </style>
@@ -177,12 +172,10 @@ html, body {
   </header>
   <div id="main">
 
-    <!-- HOME -->
     <div id="page-home" class="page active">
       <div id="home-content"></div>
     </div>
 
-    <!-- RECORD -->
     <div id="page-record" class="page">
       <div id="record-area">
         <button id="record-btn" onclick="toggleRecording()">🎙️</button>
@@ -205,7 +198,7 @@ html, body {
         <div id="processing-steps"></div>
       </div>
       <div id="transcript-card" class="card" style="display:none">
-        <div class="section-label" style="margin-bottom:10px">📝 대화 녹취록</div>
+        <div class="section-label" style="margin-bottom:10px">🗣️ 화자별 대화</div>
         <div id="transcript-box" class="transcript-box"></div>
         <div style="margin-top:12px">
           <button class="btn btn-primary btn-full" id="gen-btn" onclick="retryMinutes()" style="display:none">✨ 회의록 다시 생성</button>
@@ -213,29 +206,26 @@ html, body {
       </div>
     </div>
 
-    <!-- VIEW -->
     <div id="page-view" class="page">
       <div id="view-content"></div>
     </div>
 
-    <!-- SETTINGS -->
     <div id="page-settings" class="page">
-      <div class="alert alert-green">✅ 가입 즉시 $50 크레딧 — 약 135시간 녹음 가능, 신용카드 불필요!</div>
-      <div class="alert alert-info">🎤 자동 화자 분리 (화자1, 화자2…) + AI 회의록 자동 작성</div>
+      <div class="alert alert-green">✅ 가입 즉시 $200 무료 크레딧 — 약 700시간 녹음 가능!</div>
 
       <div class="setting-section">
-        <div class="section-label">API 키 설정</div>
+        <div class="section-label">음성 전사 + 화자 분리 (필수)</div>
         <div class="setting-card">
           <div class="setting-row">
-            <label>🔑 AssemblyAI API Key</label>
-            <input type="password" id="set-aai-token" placeholder="API 키를 입력하세요" autocomplete="off" spellcheck="false">
+            <label>🎙️ Deepgram API Key</label>
+            <input type="password" id="set-dg-token" placeholder="API 키를 입력하세요" autocomplete="off" spellcheck="false">
             <div class="setting-hint">
-              <strong>발급 방법 (1분이면 끝):</strong><br>
-              ① <strong>app.assemblyai.com</strong> 접속 → 무료 가입<br>
-              ② 로그인 후 좌측 메뉴 <strong>API Keys</strong> 클릭<br>
-              ③ 키 옆 <strong>Copy</strong> 버튼 클릭<br>
-              ④ 여기에 붙여넣기 후 저장<br><br>
-              💡 가입 즉시 $50 크레딧 — 신용카드 없이 무료 사용 가능
+              <strong>발급 방법 (1분):</strong><br>
+              ① <strong>deepgram.com</strong> 접속 → <strong>Get Started Free</strong><br>
+              ② 이메일로 무료 가입 (신용카드 불필요)<br>
+              ③ 대시보드에서 <strong>Create a new API key</strong><br>
+              ④ 이름 입력 → <strong>Create Key</strong> → 복사<br><br>
+              💡 가입 즉시 $200 크레딧 — 약 700시간 녹음 가능
             </div>
           </div>
         </div>
@@ -244,6 +234,22 @@ html, body {
           <button class="btn btn-outline" onclick="testToken()">🔍 테스트</button>
         </div>
         <div id="token-test-result" style="display:none;margin-top:10px;padding:10px 12px;border-radius:var(--radius-m);font-size:13px"></div>
+      </div>
+
+      <div class="setting-section">
+        <div class="section-label">AI 회의록 생성 (선택, 무료)</div>
+        <div class="setting-card">
+          <div class="setting-row">
+            <label>🤗 HuggingFace Token <span style="font-weight:400;color:var(--sub)">(선택)</span></label>
+            <input type="password" id="set-hf-token" placeholder="hf_..." autocomplete="off" spellcheck="false">
+            <div class="setting-hint">
+              입력하면 AI가 자동으로 회의록을 작성합니다.<br>
+              없으면 녹취록 기반 기본 회의록이 생성됩니다.<br><br>
+              <strong>발급:</strong> huggingface.co → Settings → Access Tokens → New token (Read 권한)
+            </div>
+          </div>
+        </div>
+        <button class="btn btn-outline btn-full" onclick="saveSettings()" style="margin-top:4px">저장</button>
       </div>
 
       <div class="setting-section">
@@ -276,28 +282,24 @@ html, body {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script>
-// ════════════════════════════════════════
-// STATE
-// ════════════════════════════════════════
 const S = {
   page: 'home', recording: false, processing: false,
   timerSec: 0, timerInterval: null,
   mediaRecorder: null, audioChunks: [], stream: null,
   transcript: '', currentDuration: 0,
   currentMeeting: null, meetings: [],
-  aaiToken: '', aaiTranscriptId: null, viewMode: 'view',
+  dgToken: '', hfToken: '', viewMode: 'view',
 };
 
 function init() {
-  S.aaiToken  = localStorage.getItem('ma_aai_token') || '';
-  S.meetings  = JSON.parse(localStorage.getItem('ma_meetings') || '[]');
+  S.dgToken = localStorage.getItem('ma_dg_token') || '';
+  S.hfToken = localStorage.getItem('ma_hf_token') || '';
+  S.meetings = JSON.parse(localStorage.getItem('ma_meetings') || '[]');
   renderHome();
   updateSettingsCount();
 }
 
-// ════════════════════════════════════════
-// NAVIGATION
-// ════════════════════════════════════════
+// ── NAVIGATION ──────────────────────────────────────────
 function goPage(id, meeting) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
@@ -323,9 +325,7 @@ function goPage(id, meeting) {
   document.getElementById('main').scrollTop = 0;
 }
 
-// ════════════════════════════════════════
-// HOME
-// ════════════════════════════════════════
+// ── HOME ─────────────────────────────────────────────────
 function renderHome() {
   const el = document.getElementById('home-content');
   if (S.meetings.length === 0) {
@@ -349,13 +349,11 @@ function renderHome() {
 }
 function getMeeting(id) { return S.meetings.find(m => m.id === id); }
 
-// ════════════════════════════════════════
-// RECORD
-// ════════════════════════════════════════
+// ── RECORD ───────────────────────────────────────────────
 function resetRecordPage() {
   stopMediaTracks();
   S.recording = false; S.audioChunks = []; S.transcript = '';
-  S.timerSec = 0; S.currentDuration = 0; S.aaiTranscriptId = null;
+  S.timerSec = 0; S.currentDuration = 0;
   clearInterval(S.timerInterval);
   setRecordBtn('', '🎙️');
   document.getElementById('timer').textContent = '00:00';
@@ -368,8 +366,8 @@ function resetRecordPage() {
 
 async function toggleRecording() {
   if (S.processing) return;
-  if (!S.aaiToken) {
-    showToast('설정에서 AssemblyAI API 키를 먼저 입력하세요');
+  if (!S.dgToken) {
+    showToast('설정에서 Deepgram API 키를 먼저 입력하세요');
     goPage('settings'); return;
   }
   if (!S.recording) { await startRecording(); }
@@ -460,14 +458,13 @@ async function stopAndProcess() {
   document.getElementById('record-status').textContent = 'AI가 분석 중...';
 
   showProcessing([
-    { id: 'step-trans', label: '화자 분리 + 음성 전사', desc: '오디오를 업로드하고 화자를 분리합니다...', status: 'running' },
-    { id: 'step-min',   label: '회의록 작성 (AI)',       desc: '전사 완료 후 회의록을 생성합니다',   status: 'waiting' },
+    { id: 'step-trans', label: '화자 분리 + 음성 전사', desc: '음성을 분석하고 화자를 구분합니다...', status: 'running' },
+    { id: 'step-min',   label: '회의록 작성',            desc: '전사 완료 후 회의록을 생성합니다',  status: 'waiting' },
   ]);
 
-  // Step 1: Transcription with speaker diarization
   let transcript = '';
   try {
-    transcript = await transcribeAudio(blob, mimeType);
+    transcript = await transcribeWithDeeepgram(blob, mimeType);
     S.transcript = transcript;
     updateStep('step-trans', 'done');
     renderTranscriptBubbles(transcript);
@@ -478,9 +475,8 @@ async function stopAndProcess() {
     S.processing = false; setRecordBtn('', '🎙️'); return;
   }
 
-  // Step 2: Meeting minutes via LeMUR
-  updateStep('step-min', 'running', 'AI가 회의록을 작성 중...');
-  document.getElementById('record-status').textContent = 'AI가 회의록을 작성 중...';
+  updateStep('step-min', 'running', S.hfToken ? 'AI가 회의록을 작성 중...' : '회의록 서식을 생성합니다...');
+  document.getElementById('record-status').textContent = '회의록 작성 중...';
   try {
     const minutes = await generateMeetingMinutes(transcript);
     updateStep('step-min', 'done');
@@ -501,15 +497,19 @@ async function stopAndProcess() {
 function renderTranscriptBubbles(text) {
   const box = document.getElementById('transcript-box');
   const lines = text.split('\n').filter(l => l.trim());
-  // Check if it has speaker labels (화자N: format)
   const hasSpeakers = lines.some(l => /^화자\d+:/.test(l));
   if (hasSpeakers) {
+    const colors = ['#5B5FEF','#10B981','#F59E0B','#EF4444','#8B5CF6','#EC4899'];
     box.innerHTML = lines.map(line => {
-      const m = line.match(/^(화자\d+):\s*(.*)/);
-      if (m) return `<div class="spk-line"><div class="spk-name">${escHtml(m[1])}</div><div class="spk-text">${escHtml(m[2])}</div></div>`;
-      return `<div style="margin-bottom:6px;color:var(--sub)">${escHtml(line)}</div>`;
+      const m = line.match(/^(화자(\d+)):\s*(.*)/);
+      if (m) {
+        const c = colors[(parseInt(m[2]) - 1) % colors.length];
+        return `<div class="spk-line"><div class="spk-name" style="color:${c}">${escHtml(m[1])}</div><div class="spk-text">${escHtml(m[3])}</div></div>`;
+      }
+      return `<div style="margin-bottom:6px;color:var(--sub);font-size:13px">${escHtml(line)}</div>`;
     }).join('');
   } else {
+    box.style.cssText = 'white-space:pre-wrap;word-break:break-word;font-size:13px;line-height:1.75;color:var(--gray-700)';
     box.textContent = text;
   }
 }
@@ -518,7 +518,7 @@ async function retryMinutes() {
   if (!S.transcript) { showToast('녹취록이 없습니다'); return; }
   const btn = document.getElementById('gen-btn');
   btn.disabled = true; btn.textContent = '⏳ 생성 중...';
-  showProcessing([{ id: 'step-min2', label: '회의록 작성', desc: 'AI가 회의록을 작성 중...', status: 'running' }]);
+  showProcessing([{ id: 'step-min2', label: '회의록 작성', desc: '생성 중...', status: 'running' }]);
   document.getElementById('processing-card').style.display = 'block';
   try {
     const minutes = await generateMeetingMinutes(S.transcript);
@@ -549,121 +549,93 @@ function updateStep(id, status, desc) {
   if (desc) { const d = document.getElementById(id + '-desc'); if (d) d.textContent = desc; }
 }
 
-// ════════════════════════════════════════
-// ASSEMBLYAI — 화자 분리 + 음성 전사
-// ════════════════════════════════════════
-async function transcribeAudio(blob, mimeType) {
-  const apiKey = S.aaiToken;
+// ── DEEPGRAM — 화자 분리 + 음성 전사 ─────────────────────
+async function transcribeWithDeeepgram(blob, mimeType) {
+  // Deepgram은 동기 응답 — 폴링 불필요, iOS Safari CORS 완전 지원
+  const params = new URLSearchParams({
+    model: 'nova-2',
+    diarize: 'true',
+    utterances: 'true',
+    punctuate: 'true',
+    detect_language: 'true',
+  });
 
-  // Step 1: Upload audio as ArrayBuffer (iOS-compatible)
-  updateStep('step-trans', 'running', '오디오 업로드 중...');
   const arrayBuffer = await blob.arrayBuffer();
-  const uploadRes = await fetch('https://api.assemblyai.com/v2/upload', {
+
+  const res = await fetch(`https://api.deepgram.com/v1/listen?${params}`, {
     method: 'POST',
     headers: {
-      'Authorization': apiKey,
+      'Authorization': `Token ${S.dgToken}`,
       'Content-Type': mimeType || 'audio/webm',
     },
     body: arrayBuffer,
   });
-  if (!uploadRes.ok) {
-    if (uploadRes.status === 401) throw new Error('API 키가 잘못됐습니다. 설정에서 확인해주세요');
-    const e = await uploadRes.json().catch(() => ({}));
-    throw new Error('업로드 실패 (HTTP ' + uploadRes.status + '): ' + (e.error || ''));
-  }
-  const { upload_url } = await uploadRes.json();
 
-  // Step 2: Request transcription with speaker labels
-  updateStep('step-trans', 'running', '화자 분리 분석 중...');
-  const trRes = await fetch('https://api.assemblyai.com/v2/transcript', {
-    method: 'POST',
-    headers: {
-      'Authorization': apiKey,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      audio_url: upload_url,
-      speaker_labels: true,
-      language_detection: true,
-    }),
-  });
-  if (!trRes.ok) {
-    const e = await trRes.json().catch(() => ({}));
-    throw new Error('전사 요청 실패: ' + (e.error || trRes.status));
-  }
-  const { id } = await trRes.json();
-  S.aaiTranscriptId = id;
-
-  // Step 3: Poll until completed
-  for (let i = 0; i < 80; i++) {
-    await new Promise(r => setTimeout(r, 3000));
-    const pr = await fetch(`https://api.assemblyai.com/v2/transcript/${id}`, {
-      headers: { 'Authorization': apiKey },
-    });
-    const d = await pr.json();
-
-    if (d.status === 'completed') {
-      if (d.utterances && d.utterances.length > 0) {
-        const map = {}; let n = 1;
-        return d.utterances.map(u => {
-          if (!map[u.speaker]) map[u.speaker] = n++;
-          return `화자${map[u.speaker]}: ${u.text}`;
-        }).join('\n');
-      }
-      return d.text || '';
-    }
-
-    if (d.status === 'error') throw new Error('전사 오류: ' + (d.error || '알 수 없는 오류'));
-
-    const elapsed = (i + 1) * 3;
-    updateStep('step-trans', 'running', `화자 분리 분석 중... (${elapsed}초 경과)`);
+  if (!res.ok) {
+    if (res.status === 401) throw new Error('API 키가 잘못됐습니다. 설정에서 확인해주세요');
+    const e = await res.json().catch(() => ({}));
+    throw new Error('전사 실패 (HTTP ' + res.status + '): ' + (e.err_msg || e.error || ''));
   }
 
-  throw new Error('처리 시간이 너무 깁니다. 다시 시도해주세요');
+  const data = await res.json();
+
+  // utterances가 있으면 화자별 대화 형식으로 구성
+  const utterances = data.results?.utterances;
+  if (utterances && utterances.length > 0) {
+    const speakerMap = {};
+    let n = 1;
+    return utterances.map(u => {
+      const spk = u.speaker ?? 0;
+      if (speakerMap[spk] === undefined) speakerMap[spk] = n++;
+      return `화자${speakerMap[spk]}: ${u.transcript.trim()}`;
+    }).join('\n');
+  }
+
+  // 폴백: 단순 전사 텍스트
+  const text = data.results?.channels?.[0]?.alternatives?.[0]?.transcript || '';
+  if (!text.trim()) throw new Error('음성에서 텍스트를 인식하지 못했습니다');
+  return text.trim();
 }
 
-// ════════════════════════════════════════
-// ASSEMBLYAI LeMUR — 회의록 생성
-// ════════════════════════════════════════
+// ── AI 회의록 생성 ────────────────────────────────────────
 async function generateMeetingMinutes(transcript) {
   const today = new Date().toLocaleDateString('ko-KR', { year:'numeric', month:'long', day:'numeric', weekday:'long' });
-  const maxLen = 4000;
+  const maxLen = 3500;
   const t = transcript.length > maxLen ? transcript.slice(0, maxLen) + '\n...(이하 생략)' : transcript;
 
-  // If we have a transcript ID, use LeMUR
-  if (S.aaiTranscriptId) {
+  if (S.hfToken) {
     try {
-      return await generateWithLeMUR(today);
-    } catch (e) {
-      // LeMUR failed — fall back to local formatting
+      return await generateWithHuggingFace(t, today);
+    } catch(e) {
+      // AI 실패 시 서식 기반으로 폴백
     }
   }
-
-  // Fallback: Format transcript as meeting minutes locally
-  return formatAsMinutes(t, today);
+  return buildTemplateMinutes(t, today);
 }
 
-async function generateWithLeMUR(today) {
-  const prompt = `이 회의 녹취록을 분석하여 전문적인 한국어 회의록을 마크다운 형식으로 작성해주세요.
+async function generateWithHuggingFace(transcript, today) {
+  const systemMsg = '당신은 전문 회의록 작성 전문가입니다. 반드시 한국어로 작성하세요.';
+  const userMsg = `아래 회의 녹취록을 바탕으로 체계적인 회의록을 마크다운 형식으로 작성해주세요.
 
 오늘 날짜: ${today}
 
-아래 형식을 반드시 따라 작성하세요:
+녹취록:
+${transcript}
+
+다음 형식으로 작성하세요:
 
 # [회의 핵심 주제를 반영한 제목]
 
 ## 📋 기본 정보
 - **날짜**: ${today}
-- **참석자**: [화자별 역할/이름 추정, 예: 화자1(진행자), 화자2(참석자)]
-- **주제**: [핵심 주제 1-2문장]
+- **참석자**: [화자별 추정 역할]
+- **주제**: [핵심 주제]
 
 ## 📝 회의 요약
-[전체 내용을 3-4문장으로 요약]
+[2-3문장 요약]
 
 ## 💬 주요 논의사항
-1. [첫 번째 주요 논의사항]
-2. [두 번째 주요 논의사항]
-3. [필요시 추가]
+1. [논의사항]
 
 ## ✅ 결정사항
 1. [결정된 사항]
@@ -671,50 +643,72 @@ async function generateWithLeMUR(today) {
 ## 📌 액션아이템
 | 담당자 | 내용 | 기한 |
 |--------|------|------|
-| 화자N | [할 일] | [기한] |
-
-## 🗣️ 화자별 주요 발언
-[각 화자의 핵심 발언을 간략히 정리]
 
 ---
 *Meeting Minutes App 자동 생성 · ${today}*`;
 
-  const res = await fetch('https://api.assemblyai.com/lemur/v3/request', {
+  const prompt = `<s>[INST] ${systemMsg}\n\n${userMsg} [/INST]`;
+
+  const res = await fetch('https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.2', {
     method: 'POST',
     headers: {
-      'Authorization': S.aaiToken,
+      'Authorization': `Bearer ${S.hfToken}`,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      transcript_ids: [S.aaiTranscriptId],
-      prompt,
-      final_model: 'anthropic/claude-3-haiku',
-      max_output_size: 2000,
+      inputs: prompt,
+      parameters: { max_new_tokens: 1500, temperature: 0.3, return_full_text: false },
     }),
   });
 
+  if (res.status === 503) {
+    const retry = await res.json().catch(() => ({}));
+    const waitSec = Math.min(retry.estimated_time || 20, 30);
+    updateStep('step-min', 'running', `AI 모델 준비 중... ${Math.round(waitSec)}초 후 재시도`);
+    await new Promise(r => setTimeout(r, waitSec * 1000));
+    return generateWithHuggingFace(transcript, today);
+  }
+
   if (!res.ok) {
     const e = await res.json().catch(() => ({}));
-    throw new Error((e.error || 'LeMUR HTTP ' + res.status));
+    throw new Error(e.error || 'HuggingFace HTTP ' + res.status);
   }
 
   const data = await res.json();
-  if (!data.response) throw new Error('회의록 응답이 없습니다');
-  return data.response;
+  const text = Array.isArray(data) ? data[0]?.generated_text : data.generated_text;
+  if (!text?.trim()) throw new Error('AI 응답 없음');
+  return text.trim();
 }
 
-function formatAsMinutes(transcript, today) {
+function buildTemplateMinutes(transcript, today) {
+  // Deepgram 화자 분리 결과를 화자별 요약으로 정리
+  const lines = transcript.split('\n').filter(l => l.trim());
+  const speakers = new Set();
+  lines.forEach(l => { const m = l.match(/^(화자\d+):/); if (m) speakers.add(m[1]); });
+  const spkList = [...speakers].join(', ') || '미상';
+
   return `# 회의록
 
 ## 📋 기본 정보
 - **날짜**: ${today}
-- **참석자**: 참석자 확인 필요
-- **주제**: 회의 내용 확인 필요
+- **참석자**: ${spkList} (${speakers.size}명)
+- **주제**: 회의 내용 참조
 
 ## 📝 회의 요약
-AI 회의록 생성에 실패했습니다. 아래 녹취록을 참조하여 직접 작성해주세요.
+아래 녹취록을 참조해주세요. AI 회의록 자동 생성을 원하시면 설정에서 HuggingFace 토큰을 추가로 입력해주세요.
 
-## 🗣️ 전체 녹취록
+## 💬 주요 논의사항
+- 아래 녹취록 참조
+
+## ✅ 결정사항
+- 직접 작성해주세요
+
+## 📌 액션아이템
+| 담당자 | 내용 | 기한 |
+|--------|------|------|
+| | | |
+
+## 🗣️ 전체 대화 녹취록
 
 ${transcript}
 
@@ -722,43 +716,39 @@ ${transcript}
 *Meeting Minutes App · ${today}*`;
 }
 
-// ════════════════════════════════════════
-// SETTINGS
-// ════════════════════════════════════════
+// ── SETTINGS ─────────────────────────────────────────────
 function renderSettings() {
-  document.getElementById('set-aai-token').value = S.aaiToken;
+  document.getElementById('set-dg-token').value = S.dgToken;
+  document.getElementById('set-hf-token').value = S.hfToken;
   document.getElementById('token-test-result').style.display = 'none';
   updateSettingsCount();
 }
 function saveSettings() {
-  const token = document.getElementById('set-aai-token').value.trim();
-  if (!token) { showToast('API 키를 입력해주세요'); return; }
-  S.aaiToken = token;
-  localStorage.setItem('ma_aai_token', token);
+  const dg = document.getElementById('set-dg-token').value.trim();
+  const hf = document.getElementById('set-hf-token').value.trim();
+  if (dg) { S.dgToken = dg; localStorage.setItem('ma_dg_token', dg); }
+  if (hf) { S.hfToken = hf; localStorage.setItem('ma_hf_token', hf); }
+  if (!dg && !hf) { showToast('API 키를 입력해주세요'); return; }
   showToast('저장되었습니다 ✓');
 }
 async function testToken() {
-  const token = document.getElementById('set-aai-token').value.trim();
-  if (!token) { showToast('API 키를 먼저 입력하세요'); return; }
+  const token = document.getElementById('set-dg-token').value.trim();
+  if (!token) { showToast('Deepgram API 키를 먼저 입력하세요'); return; }
   const el = document.getElementById('token-test-result');
   el.style.display = 'block';
   el.style.background = 'var(--gray-100)'; el.style.color = 'var(--gray-700)';
   el.textContent = '🔍 테스트 중...';
   try {
-    const res = await fetch('https://api.assemblyai.com/v2/account', {
-      headers: { 'Authorization': token }
+    const res = await fetch('https://api.deepgram.com/v1/projects', {
+      headers: { 'Authorization': `Token ${token}` }
     });
     if (res.ok) {
-      const data = await res.json();
-      const credit = data.current_billing_cycle?.credits_used !== undefined
-        ? ` · 사용 크레딧: $${(data.current_billing_cycle.credits_used || 0).toFixed(2)}`
-        : '';
       el.style.background = 'var(--green-l)'; el.style.color = '#065F46';
-      el.textContent = `✅ API 키 정상!${credit} — 저장을 눌러주세요`;
-      S.aaiToken = token; localStorage.setItem('ma_aai_token', token);
+      el.textContent = '✅ API 키 정상! 저장 버튼을 눌러주세요.';
+      S.dgToken = token; localStorage.setItem('ma_dg_token', token);
     } else if (res.status === 401) {
       el.style.background = 'var(--red-l)'; el.style.color = '#991B1B';
-      el.textContent = '❌ API 키가 잘못됐습니다. app.assemblyai.com에서 다시 확인해주세요.';
+      el.textContent = '❌ API 키가 잘못됐습니다. deepgram.com 대시보드에서 확인해주세요.';
     } else {
       el.style.background = 'var(--orange-l)'; el.style.color = '#92400E';
       el.textContent = '⚠️ HTTP ' + res.status + ' — 잠시 후 다시 시도해주세요';
@@ -778,9 +768,7 @@ function clearAll() {
   showToast('삭제되었습니다');
 }
 
-// ════════════════════════════════════════
-// VIEW
-// ════════════════════════════════════════
+// ── VIEW ──────────────────────────────────────────────────
 function renderView() {
   const m = S.currentMeeting; if (!m) { goPage('home'); return; }
   const el = document.getElementById('view-content');
@@ -833,9 +821,7 @@ function confirmDelete(id) {
   saveMeetingsData(); showToast('삭제됐습니다'); goPage('home');
 }
 
-// ════════════════════════════════════════
-// DATA / EXPORT
-// ════════════════════════════════════════
+// ── DATA / EXPORT ────────────────────────────────────────
 function saveMeeting({ transcript, minutes, duration, createdAt }) {
   const m = { id: 'mtg_'+Date.now()+'_'+Math.random().toString(36).slice(2,6), title: extractTitle(minutes||transcript), transcript, minutes, duration, createdAt };
   S.meetings.push(m); saveMeetingsData(); return m;
@@ -852,7 +838,7 @@ async function exportPDF(id) {
   if (typeof html2canvas==='undefined'||typeof window.jspdf==='undefined') { showToast('잠시 후 다시 시도하세요'); return; }
   showToast('PDF 생성 중...');
   const pdfEl = document.getElementById('pdf-content');
-  pdfEl.innerHTML = `<style>h1{font-size:22px;font-weight:700;margin:0 0 16px}h2{font-size:16px;font-weight:700;margin:20px 0 8px;padding-bottom:6px;border-bottom:2px solid #E5E7EB}p{margin:4px 0;color:#374151;font-size:13px;line-height:1.85}ul,ol{margin-left:20px}li{margin:3px 0;font-size:13px}table{border-collapse:collapse;width:100%;margin:10px 0;font-size:12px}th{background:#F3F4F6;font-weight:700;text-align:left}th,td{border:1px solid #E5E7EB;padding:6pt 8pt}strong{font-weight:700}</style>${mdToHtml(m.minutes||m.transcript)}`;
+  pdfEl.innerHTML = `<style>h1{font-size:22px;font-weight:700;margin:0 0 16px}h2{font-size:16px;font-weight:700;margin:20px 0 8px;padding-bottom:6px;border-bottom:2px solid #E5E7EB}p{margin:4px 0;color:#374151;font-size:13px;line-height:1.85}ul,ol{margin-left:20px}li{margin:3px 0;font-size:13px}table{border-collapse:collapse;width:100%;margin:10px 0;font-size:12px}th{background:#F3F4F6;font-weight:700;text-align:left}th,td{border:1px solid #E5E7EB;padding:6px 10px}strong{font-weight:700}</style>${mdToHtml(m.minutes||m.transcript)}`;
   pdfEl.style.display = 'block';
   try {
     const canvas = await html2canvas(pdfEl, {scale:2,useCORS:true,logging:false,width:794});
@@ -873,9 +859,7 @@ function exportWord(id) {
   showToast('Word 저장됨');
 }
 
-// ════════════════════════════════════════
-// MARKDOWN → HTML
-// ════════════════════════════════════════
+// ── MARKDOWN → HTML ──────────────────────────────────────
 function mdToHtml(md) {
   if (!md) return '';
   const inl = t => t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\*(.+?)\*/g,'<em>$1</em>').replace(/`(.+?)`/g,'<code>$1</code>');
@@ -899,9 +883,7 @@ function mdToHtml(md) {
   flushList(); flushTable(); return html;
 }
 
-// ════════════════════════════════════════
-// UTILS
-// ════════════════════════════════════════
+// ── UTILS ────────────────────────────────────────────────
 function fmtTimer(s) { return `${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`; }
 function fmtDate(ts) { return new Date(ts).toLocaleDateString('ko-KR',{year:'numeric',month:'long',day:'numeric'}); }
 function fmtDuration(s) { if(!s||s<1)return'-'; const m=Math.floor(s/60); return m>0?`${m}분 ${s%60}초`:`${s}초`; }
