@@ -40,7 +40,6 @@
 
   --shadow-s: 0 1px 3px rgba(0,0,0,.08);
   --shadow-m: 0 4px 16px rgba(0,0,0,.08);
-  --shadow-l: 0 8px 32px rgba(0,0,0,.12);
 
   --nav-h: 64px;
   --top-h: 56px;
@@ -55,7 +54,6 @@ html, body {
   font-size: 14px;
   line-height: 1.5;
 }
-
 #app {
   display: flex;
   flex-direction: column;
@@ -63,7 +61,6 @@ html, body {
   max-width: 480px;
   margin: 0 auto;
   background: var(--bg);
-  position: relative;
 }
 
 /* ── Top Bar ── */
@@ -81,10 +78,8 @@ html, body {
 #topbar h1 { font-size: 17px; font-weight: 700; }
 #topbar-right { display: flex; gap: 8px; }
 
-/* ── Main ── */
 #main { flex: 1; overflow-y: auto; padding-bottom: calc(var(--nav-h) + 8px); }
 
-/* ── Pages ── */
 .page { display: none; padding: 16px; }
 .page.active { display: block; }
 
@@ -144,12 +139,12 @@ html, body {
   transition: all .15s;
   font-family: inherit;
 }
-.btn-primary  { background: var(--primary); color: #fff; }
-.btn-primary:hover  { opacity: .88; }
-.btn-outline  { background: none; border: 1.5px solid var(--border); color: var(--text); }
-.btn-outline:hover  { background: var(--gray-50); }
-.btn-danger   { background: var(--red); color: #fff; }
-.btn-sm  { padding: 7px 13px; font-size: 13px; }
+.btn-primary { background: var(--primary); color: #fff; }
+.btn-primary:hover { opacity: .88; }
+.btn-outline { background: none; border: 1.5px solid var(--border); color: var(--text); }
+.btn-outline:hover { background: var(--gray-50); }
+.btn-danger  { background: var(--red); color: #fff; }
+.btn-sm   { padding: 7px 13px; font-size: 13px; }
 .btn-full { width: 100%; }
 .btn:disabled { opacity: .45; cursor: not-allowed; }
 
@@ -158,7 +153,7 @@ html, body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 36px 0 24px;
+  padding: 32px 0 20px;
 }
 #record-btn {
   width: 100px;
@@ -173,12 +168,11 @@ html, body {
   justify-content: center;
   font-size: 38px;
   transition: all .15s;
-  position: relative;
 }
 #record-btn:hover { transform: scale(1.04); }
 #record-btn.recording { animation: pulse 1.6s ease-in-out infinite; }
-#record-btn.paused  { background: var(--orange); box-shadow: 0 4px 20px rgba(245,158,11,.3); }
-#record-btn.idle    { background: var(--gray-300); box-shadow: none; }
+#record-btn.paused { background: var(--orange); box-shadow: 0 4px 20px rgba(245,158,11,.3); }
+#record-btn.idle   { background: var(--gray-300); box-shadow: none; }
 
 @keyframes pulse {
   0%,100% { box-shadow: 0 4px 24px rgba(239,68,68,.35); }
@@ -188,7 +182,7 @@ html, body {
 #timer {
   font-size: 34px;
   font-weight: 700;
-  margin: 18px 0 6px;
+  margin: 16px 0 6px;
   font-variant-numeric: tabular-nums;
   letter-spacing: -1px;
 }
@@ -200,7 +194,30 @@ html, body {
   min-height: 20px;
 }
 
-/* ── Processing Steps ── */
+/* ── Live Transcript ── */
+#live-box {
+  min-height: 80px;
+  max-height: 180px;
+  overflow-y: auto;
+  font-size: 14px;
+  line-height: 1.75;
+  word-break: break-word;
+}
+#live-final   { color: var(--gray-700); }
+#live-interim { color: var(--gray-400); font-style: italic; }
+
+/* ── Dot indicator ── */
+.rec-dot {
+  display: inline-block;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--red);
+  margin-right: 6px;
+  animation: blink 1s ease-in-out infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.2} }
+
+/* ── Processing ── */
 .progress-step {
   display: flex;
   align-items: center;
@@ -224,7 +241,7 @@ html, body {
 .step-label { font-size: 14px; font-weight: 600; }
 .step-desc  { font-size: 12px; color: var(--sub); margin-top: 1px; }
 
-/* ── Transcript Box ── */
+/* ── Transcript box ── */
 #transcript-box {
   background: var(--gray-50);
   border-radius: var(--radius-m);
@@ -253,7 +270,6 @@ html, body {
 .md-body strong { font-weight: 700; color: var(--text); }
 .md-body em { font-style: italic; }
 .md-body code { background: var(--gray-100); padding: 1px 5px; border-radius: 4px; font-size: 12px; }
-.md-body br { display: block; margin: 3px 0; content: ''; }
 
 /* ── Meeting List ── */
 .meeting-item {
@@ -275,7 +291,7 @@ html, body {
 .meeting-meta  { font-size: 12px; color: var(--sub); }
 .meeting-arrow { color: var(--gray-300); font-size: 20px; }
 
-/* ── Download Buttons ── */
+/* ── Download ── */
 .dl-btns { display: flex; gap: 8px; }
 .dl-btn {
   flex: 1;
@@ -290,9 +306,9 @@ html, body {
 .dl-btn:hover { border-color: var(--primary); background: var(--primary-l); }
 .dl-btn:active { transform: scale(.97); }
 .dl-icon  { font-size: 22px; display: block; margin-bottom: 4px; }
-.dl-label { font-size: 11px; font-weight: 700; color: var(--sub); letter-spacing: .3px; }
+.dl-label { font-size: 11px; font-weight: 700; color: var(--sub); }
 
-/* ── Empty State ── */
+/* ── Empty ── */
 .empty-state { text-align: center; padding: 60px 20px; }
 .empty-ico  { font-size: 52px; margin-bottom: 14px; }
 .empty-text { font-size: 16px; font-weight: 600; color: var(--gray-600); margin-bottom: 6px; }
@@ -352,7 +368,6 @@ html, body {
 .tab { flex: 1; padding: 8px; border: none; background: none; border-radius: var(--radius-s); font-size: 13px; font-weight: 600; cursor: pointer; color: var(--sub); transition: all .15s; font-family: inherit; }
 .tab.active { background: #fff; color: var(--text); box-shadow: var(--shadow-s); }
 
-/* ── Edit Textarea ── */
 #minutes-edit {
   width: 100%;
   min-height: 420px;
@@ -370,12 +385,11 @@ html, body {
 }
 #minutes-edit:focus { border-color: var(--primary); background: #fff; }
 
-/* ── Alert ── */
 .alert { padding: 12px 14px; border-radius: var(--radius-m); margin-bottom: 12px; font-size: 13px; }
 .alert-info    { background: var(--primary-l); color: #1E3A8A; border-left: 3px solid var(--primary); }
+.alert-green   { background: var(--green-l);   color: #065F46; border-left: 3px solid var(--green); }
 .alert-warning { background: var(--orange-l);  color: #92400E; border-left: 3px solid var(--orange); }
 
-/* ── PDF Hidden Content ── */
 #pdf-content {
   position: fixed;
   left: -9999px;
@@ -396,13 +410,11 @@ html, body {
 </head>
 <body>
 <div id="app">
-  <!-- Top Bar -->
   <header id="topbar">
     <h1 id="topbar-title">🎙️ Meeting Minutes</h1>
     <div id="topbar-right"></div>
   </header>
 
-  <!-- Main -->
   <div id="main">
 
     <!-- HOME -->
@@ -419,9 +431,20 @@ html, body {
       </div>
 
       <div id="record-controls" style="display:none">
-        <div style="display:flex;gap:10px;justify-content:center;margin-bottom:18px">
+        <div style="display:flex;gap:10px;justify-content:center;margin-bottom:16px">
           <button class="btn btn-danger" onclick="stopAndProcess()">⏹ 완료</button>
           <button class="btn btn-outline" onclick="cancelRecording()">취소</button>
+        </div>
+      </div>
+
+      <!-- 실시간 자막 -->
+      <div id="live-card" class="card" style="display:none">
+        <div style="display:flex;align-items:center;margin-bottom:10px">
+          <span class="rec-dot"></span>
+          <span class="section-label" style="margin:0">실시간 인식</span>
+        </div>
+        <div id="live-box">
+          <span id="live-final"></span><span id="live-interim"></span>
         </div>
       </div>
 
@@ -431,9 +454,7 @@ html, body {
       </div>
 
       <div id="transcript-card" class="card" style="display:none">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-          <div class="section-label" style="margin:0">녹취록</div>
-        </div>
+        <div class="section-label" style="margin-bottom:10px">녹취록</div>
         <div id="transcript-box"></div>
         <div style="margin-top:12px">
           <button class="btn btn-primary btn-full" id="gen-btn" onclick="createMinutes()">✨ 회의록 생성</button>
@@ -448,20 +469,19 @@ html, body {
 
     <!-- SETTINGS -->
     <div id="page-settings" class="page">
-      <div class="alert alert-info">🔒 API 키는 이 브라우저에만 저장됩니다. 외부로 전송되지 않습니다.</div>
+      <div class="alert alert-green">✅ 완전 무료! API 키 1개만 있으면 됩니다.</div>
+      <div class="alert alert-info">🔒 API 키는 이 브라우저에만 저장됩니다.</div>
 
       <div class="setting-section">
         <div class="section-label">API 키 설정</div>
         <div class="setting-card">
           <div class="setting-row">
-            <label>🎤 OpenAI API Key (음성 인식)</label>
-            <input type="password" id="set-openai" placeholder="sk-..." autocomplete="off" spellcheck="false">
-            <div class="setting-hint">Whisper-1 모델로 음성을 텍스트로 변환합니다</div>
-          </div>
-          <div class="setting-row">
-            <label>✍️ Anthropic API Key (회의록 작성)</label>
-            <input type="password" id="set-claude" placeholder="sk-ant-..." autocomplete="off" spellcheck="false">
-            <div class="setting-hint">Claude가 녹취록을 구조화된 회의록으로 정리합니다</div>
+            <label>🤖 Google Gemini API Key (회의록 작성)</label>
+            <input type="password" id="set-gemini" placeholder="AIza..." autocomplete="off" spellcheck="false">
+            <div class="setting-hint">
+              무료 발급: <strong>aistudio.google.com</strong> → Get API key<br>
+              음성 인식은 브라우저 내장 기능 사용 (무료)
+            </div>
           </div>
         </div>
         <button class="btn btn-primary btn-full" onclick="saveSettings()" style="margin-top:4px">저장</button>
@@ -479,9 +499,8 @@ html, body {
       </div>
     </div>
 
-  </div><!-- /main -->
+  </div>
 
-  <!-- Bottom Nav -->
   <nav id="bottom-nav">
     <button class="nav-btn active" id="nav-home" onclick="goPage('home')">
       <span class="nav-icon">🏠</span>홈
@@ -510,15 +529,12 @@ const S = {
   processing: false,
   timerSec: 0,
   timerInterval: null,
-  mediaRecorder: null,
-  audioChunks: [],
-  stream: null,
-  transcript: '',
+  recognition: null,
+  finalTranscript: '',
   currentDuration: 0,
   currentMeeting: null,
   meetings: [],
-  openaiKey: '',
-  claudeKey: '',
+  geminiKey: '',
   viewMode: 'view',
 };
 
@@ -526,11 +542,15 @@ const S = {
 // INIT
 // ════════════════════════════════════════
 function init() {
-  S.openaiKey  = localStorage.getItem('ma_openai')   || '';
-  S.claudeKey  = localStorage.getItem('ma_claude')   || '';
-  S.meetings   = JSON.parse(localStorage.getItem('ma_meetings') || '[]');
+  S.geminiKey = localStorage.getItem('ma_gemini') || '';
+  S.meetings  = JSON.parse(localStorage.getItem('ma_meetings') || '[]');
   renderHome();
   updateSettingsCount();
+
+  // 브라우저 지원 체크
+  if (!('SpeechRecognition' in window) && !('webkitSpeechRecognition' in window)) {
+    console.warn('SpeechRecognition not supported');
+  }
 }
 
 // ════════════════════════════════════════
@@ -601,69 +621,107 @@ function getMeeting(id) { return S.meetings.find(m => m.id === id); }
 // RECORD PAGE
 // ════════════════════════════════════════
 function resetRecordPage() {
-  if (S.recording || S.mediaRecorder) stopMediaTracks();
+  stopSpeechRecognition();
   S.recording = false;
+  S.finalTranscript = '';
   S.timerSec = 0;
-  S.audioChunks = [];
-  S.transcript = '';
   S.currentDuration = 0;
-  S.mediaRecorder = null;
   clearInterval(S.timerInterval);
 
-  const btn = document.getElementById('record-btn');
-  btn.textContent = '🎙️';
-  btn.className = '';
+  setRecordBtn('', '🎙️');
   document.getElementById('timer').textContent = '00:00';
   document.getElementById('record-status').textContent = '버튼을 눌러 녹음을 시작하세요';
   document.getElementById('record-controls').style.display = 'none';
+  document.getElementById('live-card').style.display = 'none';
   document.getElementById('processing-card').style.display = 'none';
   document.getElementById('transcript-card').style.display = 'none';
+  document.getElementById('live-final').textContent = '';
+  document.getElementById('live-interim').textContent = '';
 }
 
 async function toggleRecording() {
   if (S.processing) return;
 
-  if (S.mediaRecorder) {
-    // Already in a session — toggle pause/resume
-    if (S.recording) {
-      pauseRecording();
-    } else {
-      resumeRecording();
+  if (!S.recording) {
+    if (!S.geminiKey) {
+      showToast('설정에서 Gemini API 키를 먼저 입력하세요');
+      goPage('settings');
+      return;
     }
-    return;
-  }
 
-  // New session
-  if (!S.openaiKey) {
-    showToast('설정에서 OpenAI API 키를 먼저 입력하세요');
-    goPage('settings');
-    return;
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SR) {
+      showToast('이 브라우저는 음성 인식을 지원하지 않습니다. Chrome을 사용해주세요.');
+      return;
+    }
+    startRecording(SR);
+  } else {
+    pauseRecording();
   }
-  await startRecording();
 }
 
-async function startRecording() {
+function startRecording(SR) {
+  S.finalTranscript = '';
+  S.recording = true;
+
+  const rec = new SR();
+  rec.lang = 'ko-KR';
+  rec.continuous = true;
+  rec.interimResults = true;
+  S.recognition = rec;
+
+  rec.onstart = () => {
+    setRecordBtn('recording', '⏸');
+    document.getElementById('record-status').textContent = '녹음 중... 회의 내용을 말씀하세요';
+    document.getElementById('record-controls').style.display = 'block';
+    document.getElementById('live-card').style.display = 'block';
+    document.getElementById('processing-card').style.display = 'none';
+    document.getElementById('transcript-card').style.display = 'none';
+  };
+
+  rec.onresult = (e) => {
+    let interim = '';
+    for (let i = e.resultIndex; i < e.results.length; i++) {
+      if (e.results[i].isFinal) {
+        S.finalTranscript += e.results[i][0].transcript + ' ';
+      } else {
+        interim += e.results[i][0].transcript;
+      }
+    }
+    document.getElementById('live-final').textContent = S.finalTranscript;
+    document.getElementById('live-interim').textContent = interim;
+    // 자동 스크롤
+    const box = document.getElementById('live-box');
+    box.scrollTop = box.scrollHeight;
+  };
+
+  rec.onerror = (e) => {
+    if (e.error === 'no-speech' || e.error === 'aborted') return;
+    if (e.error === 'not-allowed') {
+      showToast('마이크 권한이 필요합니다');
+      cancelRecording();
+      return;
+    }
+    // 기타 오류는 재시작
+    console.warn('SpeechRecognition error:', e.error);
+  };
+
+  rec.onend = () => {
+    // 녹음 중이면 자동 재시작 (iOS 등 자동 종료 대응)
+    if (S.recording) {
+      try { rec.start(); } catch(e) {}
+    }
+  };
+
   try {
-    S.stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
-  } catch (err) {
-    showToast(err.name === 'NotAllowedError' ? '마이크 권한이 필요합니다' : '마이크 오류: ' + err.message);
+    rec.start();
+  } catch(e) {
+    showToast('음성 인식 시작 실패: ' + e.message);
+    S.recording = false;
     return;
   }
 
-  S.audioChunks = [];
-  S.mediaRecorder = new MediaRecorder(S.stream);
-  S.mediaRecorder.ondataavailable = e => { if (e.data.size > 0) S.audioChunks.push(e.data); };
-  S.mediaRecorder.start(500);
-
-  S.recording = true;
-  S.timerSec  = 0;
-
-  setRecordBtn('recording', '⏸');
-  document.getElementById('record-status').textContent = '녹음 중... 회의 내용을 말씀하세요';
-  document.getElementById('record-controls').style.display = 'block';
-  document.getElementById('processing-card').style.display = 'none';
-  document.getElementById('transcript-card').style.display = 'none';
-
+  S.timerSec = 0;
   S.timerInterval = setInterval(() => {
     S.timerSec++;
     document.getElementById('timer').textContent = fmtTimer(S.timerSec);
@@ -671,22 +729,18 @@ async function startRecording() {
 }
 
 function pauseRecording() {
-  if (S.mediaRecorder?.state === 'recording') S.mediaRecorder.pause();
+  stopSpeechRecognition();
   clearInterval(S.timerInterval);
   S.recording = false;
   setRecordBtn('paused', '▶️');
   document.getElementById('record-status').textContent = '일시정지됨 — 버튼을 눌러 계속하세요';
 }
 
-function resumeRecording() {
-  if (S.mediaRecorder?.state === 'paused') S.mediaRecorder.resume();
-  S.recording = true;
-  setRecordBtn('recording', '⏸');
-  document.getElementById('record-status').textContent = '녹음 중... 회의 내용을 말씀하세요';
-  S.timerInterval = setInterval(() => {
-    S.timerSec++;
-    document.getElementById('timer').textContent = fmtTimer(S.timerSec);
-  }, 1000);
+function stopSpeechRecognition() {
+  if (S.recognition) {
+    try { S.recognition.stop(); } catch(e) {}
+    S.recognition = null;
+  }
 }
 
 function setRecordBtn(cls, icon) {
@@ -695,89 +749,58 @@ function setRecordBtn(cls, icon) {
   btn.textContent = icon;
 }
 
-function stopMediaTracks() {
-  clearInterval(S.timerInterval);
-  try { if (S.mediaRecorder && S.mediaRecorder.state !== 'inactive') S.mediaRecorder.stop(); } catch(e) {}
-  if (S.stream) S.stream.getTracks().forEach(t => t.stop());
-}
-
 function cancelRecording() {
-  stopMediaTracks();
+  stopSpeechRecognition();
   resetRecordPage();
 }
 
 async function stopAndProcess() {
+  stopSpeechRecognition();
   clearInterval(S.timerInterval);
   const duration = S.timerSec;
   S.recording = false;
+  S.currentDuration = duration;
+
+  const transcript = S.finalTranscript.trim();
 
   setRecordBtn('idle', '⏳');
   document.getElementById('record-controls').style.display = 'none';
-  document.getElementById('record-status').textContent = '녹음 완료, 변환 중...';
+  document.getElementById('live-card').style.display = 'none';
 
-  const blob = await new Promise(resolve => {
-    const finish = () => {
-      const b = new Blob(S.audioChunks, { type: 'audio/webm' });
-      if (S.stream) S.stream.getTracks().forEach(t => t.stop());
-      resolve(b);
-    };
-    if (!S.mediaRecorder || S.mediaRecorder.state === 'inactive') {
-      finish();
-    } else {
-      S.mediaRecorder.onstop = finish;
-      S.mediaRecorder.stop();
-    }
-  });
-
-  S.currentDuration = duration;
-  S.processing = true;
-
-  showProcessing([
-    { id: 'step-whisper', label: '음성 인식 (Whisper)', desc: 'OpenAI Whisper가 음성을 텍스트로 변환 중...', status: 'running' },
-    { id: 'step-claude',  label: '회의록 생성 (Claude)', desc: 'Claude AI가 회의록을 작성할 예정', status: 'waiting' },
-  ]);
-
-  let transcript = '';
-  try {
-    transcript = await transcribeWithWhisper(blob);
-    S.transcript = transcript;
-    updateStep('step-whisper', 'done');
-  } catch (err) {
-    updateStep('step-whisper', 'error', err.message);
-    document.getElementById('record-status').textContent = '음성 인식 실패: ' + err.message;
-    S.processing = false;
+  if (!transcript) {
+    showToast('인식된 내용이 없습니다. 다시 시도해주세요.');
     setRecordBtn('', '🎙️');
-    document.getElementById('transcript-card').style.display = 'block';
-    document.getElementById('transcript-box').textContent = '';
+    document.getElementById('record-status').textContent = '버튼을 눌러 녹음을 시작하세요';
     return;
   }
 
+  // 녹취록 표시
   document.getElementById('transcript-box').textContent = transcript;
   document.getElementById('transcript-card').style.display = 'block';
 
-  if (!S.claudeKey) {
-    updateStep('step-claude', 'error', 'API 키 없음 — 설정에서 입력하세요');
-    document.getElementById('record-status').textContent = '녹취록 완료. Claude 키를 설정하고 회의록을 생성하세요.';
-    S.processing = false;
+  if (!S.geminiKey) {
+    document.getElementById('record-status').textContent = '녹취록 완료. Gemini 키를 설정하고 회의록을 생성하세요.';
     setRecordBtn('', '🎙️');
     return;
   }
 
-  updateStep('step-claude', 'running');
-  document.getElementById('record-status').textContent = 'Claude가 회의록을 작성 중...';
+  // 자동으로 회의록 생성
   document.getElementById('gen-btn').style.display = 'none';
+  showProcessing([{ id: 'step-gemini', label: '회의록 생성 (Gemini)', desc: 'Google Gemini가 회의록을 작성 중...', status: 'running' }]);
+  document.getElementById('record-status').textContent = 'Gemini가 회의록을 작성 중...';
+  S.processing = true;
 
   try {
-    const minutes = await generateWithClaude(transcript);
-    updateStep('step-claude', 'done');
+    const minutes = await generateWithGemini(transcript);
+    updateStep('step-gemini', 'done');
     const meeting = saveMeeting({ transcript, minutes, duration, createdAt: Date.now() });
     document.getElementById('record-status').textContent = '✅ 회의록 완성!';
-    S.processing = false;
     showToast('회의록이 저장되었습니다');
+    S.processing = false;
     setTimeout(() => goPage('view', meeting), 800);
   } catch (err) {
-    updateStep('step-claude', 'error', err.message);
-    document.getElementById('record-status').textContent = 'Claude 오류: ' + err.message;
+    updateStep('step-gemini', 'error', err.message);
+    document.getElementById('record-status').textContent = '오류: ' + err.message;
     document.getElementById('gen-btn').style.display = '';
     S.processing = false;
   }
@@ -785,23 +808,24 @@ async function stopAndProcess() {
 }
 
 async function createMinutes() {
-  if (!S.claudeKey) { showToast('설정에서 Anthropic API 키를 입력하세요'); goPage('settings'); return; }
-  if (!S.transcript) { showToast('녹취록이 없습니다'); return; }
+  if (!S.geminiKey) { showToast('설정에서 Gemini API 키를 입력하세요'); goPage('settings'); return; }
+  const transcript = S.finalTranscript.trim() || document.getElementById('transcript-box').textContent;
+  if (!transcript) { showToast('녹취록이 없습니다'); return; }
 
   document.getElementById('gen-btn').disabled = true;
   document.getElementById('gen-btn').textContent = '⏳ 생성 중...';
-  showProcessing([{ id: 'step-claude2', label: '회의록 생성 (Claude)', desc: 'Claude AI가 회의록을 작성 중...', status: 'running' }]);
+  showProcessing([{ id: 'step-gemini2', label: '회의록 생성 (Gemini)', desc: 'Google Gemini가 회의록을 작성 중...', status: 'running' }]);
   document.getElementById('processing-card').style.display = 'block';
 
   try {
-    const minutes = await generateWithClaude(S.transcript);
-    updateStep('step-claude2', 'done');
-    const meeting = saveMeeting({ transcript: S.transcript, minutes, duration: S.currentDuration, createdAt: Date.now() });
+    const minutes = await generateWithGemini(transcript);
+    updateStep('step-gemini2', 'done');
+    const meeting = saveMeeting({ transcript, minutes, duration: S.currentDuration, createdAt: Date.now() });
     showToast('회의록이 생성되었습니다');
     setTimeout(() => goPage('view', meeting), 500);
   } catch (err) {
-    updateStep('step-claude2', 'error', err.message);
-    showToast('회의록 생성 실패: ' + err.message);
+    updateStep('step-gemini2', 'error', err.message);
+    showToast('오류: ' + err.message);
     document.getElementById('gen-btn').disabled = false;
     document.getElementById('gen-btn').textContent = '✨ 회의록 생성';
   }
@@ -901,16 +925,13 @@ function confirmDelete(id) {
 // SETTINGS
 // ════════════════════════════════════════
 function renderSettings() {
-  document.getElementById('set-openai').value = S.openaiKey;
-  document.getElementById('set-claude').value = S.claudeKey;
+  document.getElementById('set-gemini').value = S.geminiKey;
   updateSettingsCount();
 }
 
 function saveSettings() {
-  S.openaiKey = document.getElementById('set-openai').value.trim();
-  S.claudeKey = document.getElementById('set-claude').value.trim();
-  localStorage.setItem('ma_openai', S.openaiKey);
-  localStorage.setItem('ma_claude', S.claudeKey);
+  S.geminiKey = document.getElementById('set-gemini').value.trim();
+  localStorage.setItem('ma_gemini', S.geminiKey);
   showToast('저장되었습니다 ✓');
 }
 
@@ -928,28 +949,9 @@ function clearAll() {
 }
 
 // ════════════════════════════════════════
-// API
+// GEMINI API
 // ════════════════════════════════════════
-async function transcribeWithWhisper(blob) {
-  const form = new FormData();
-  form.append('file', blob, 'recording.webm');
-  form.append('model', 'whisper-1');
-  form.append('language', 'ko');
-
-  const res = await fetch('https://api.openai.com/v1/audio/transcriptions', {
-    method: 'POST',
-    headers: { 'Authorization': 'Bearer ' + S.openaiKey },
-    body: form,
-  });
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({}));
-    throw new Error(err.error?.message || 'Whisper HTTP ' + res.status);
-  }
-  const data = await res.json();
-  return data.text || '';
-}
-
-async function generateWithClaude(transcript) {
+async function generateWithGemini(transcript) {
   const today = new Date().toLocaleDateString('ko-KR', { year:'numeric', month:'long', day:'numeric', weekday:'long' });
   const prompt = `당신은 전문 비서이자 회의록 작성 전문가입니다.
 아래 회의 녹취록을 분석하여 체계적인 회의록을 마크다운 형식으로 작성해주세요.
@@ -990,27 +992,26 @@ ${transcript}
 녹취록:
 ${transcript}`;
 
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': S.claudeKey,
-      'anthropic-version': '2023-06-01',
-      'anthropic-dangerous-direct-browser-access': 'true',
-    },
-    body: JSON.stringify({
-      model: 'claude-sonnet-4-6',
-      max_tokens: 4096,
-      messages: [{ role: 'user', content: prompt }],
-    }),
-  });
+  const res = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${S.geminiKey}`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: prompt }] }],
+        generationConfig: { maxOutputTokens: 4096, temperature: 0.3 },
+      }),
+    }
+  );
 
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));
-    throw new Error(err.error?.message || 'Claude HTTP ' + res.status);
+    throw new Error(err.error?.message || 'Gemini HTTP ' + res.status);
   }
   const data = await res.json();
-  return data.content?.[0]?.text || '';
+  const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+  if (!text) throw new Error('Gemini 응답이 비어 있습니다');
+  return text;
 }
 
 // ════════════════════════════════════════
@@ -1018,7 +1019,7 @@ ${transcript}`;
 // ════════════════════════════════════════
 function saveMeeting({ transcript, minutes, duration, createdAt }) {
   const m = {
-    id: 'mtg_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7),
+    id: 'mtg_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
     title: extractTitle(minutes || transcript),
     transcript,
     minutes,
@@ -1031,7 +1032,8 @@ function saveMeeting({ transcript, minutes, duration, createdAt }) {
 }
 
 function saveMeetingsData() {
-  try { localStorage.setItem('ma_meetings', JSON.stringify(S.meetings)); } catch(e) { showToast('저장 공간 부족'); }
+  try { localStorage.setItem('ma_meetings', JSON.stringify(S.meetings)); }
+  catch(e) { showToast('저장 공간 부족'); }
 }
 
 // ════════════════════════════════════════
@@ -1039,48 +1041,36 @@ function saveMeetingsData() {
 // ════════════════════════════════════════
 function exportMD(id) {
   const m = getMeeting(id); if (!m) return;
-  const blob = new Blob([m.minutes || m.transcript], { type: 'text/markdown;charset=utf-8' });
-  dlBlob(blob, safeFilename(m.title) + '.md');
+  dlBlob(new Blob([m.minutes || m.transcript], { type: 'text/markdown;charset=utf-8' }), safeFilename(m.title) + '.md');
   showToast('Markdown으로 저장되었습니다');
 }
 
 async function exportPDF(id) {
   const m = getMeeting(id); if (!m) return;
   if (typeof html2canvas === 'undefined' || typeof window.jspdf === 'undefined') {
-    showToast('PDF 라이브러리 로딩 중... 잠시 후 다시 시도하세요');
-    return;
+    showToast('라이브러리 로딩 중... 잠시 후 다시 시도하세요'); return;
   }
   showToast('PDF 생성 중...');
-
   const pdfEl = document.getElementById('pdf-content');
-  pdfEl.innerHTML = `
-    <style>
-      h1{font-size:22px;font-weight:700;margin:0 0 16px;color:#111827}
-      h2{font-size:16px;font-weight:700;margin:20px 0 8px;padding-bottom:6px;border-bottom:2px solid #E5E7EB;color:#111827}
-      h3{font-size:14px;font-weight:600;margin:14px 0 6px;color:#374151}
-      p{margin:4px 0;color:#374151;font-size:13px;line-height:1.85}
-      ul,ol{margin:4px 0 4px 20px}
-      li{margin:3px 0;font-size:13px;color:#374151}
-      table{border-collapse:collapse;width:100%;margin:10px 0;font-size:12px}
-      th{background:#F3F4F6;font-weight:700;text-align:left}
-      th,td{border:1px solid #E5E7EB;padding:6px 10px}
-      hr{border:none;border-top:1px solid #E5E7EB;margin:14px 0}
-      strong{font-weight:700;color:#111827}
-    </style>
-    ${mdToHtml(m.minutes || m.transcript)}`;
+  pdfEl.innerHTML = `<style>
+    h1{font-size:22px;font-weight:700;margin:0 0 16px;color:#111827}
+    h2{font-size:16px;font-weight:700;margin:20px 0 8px;padding-bottom:6px;border-bottom:2px solid #E5E7EB}
+    h3{font-size:14px;font-weight:600;margin:14px 0 6px;color:#374151}
+    p{margin:4px 0;color:#374151;font-size:13px;line-height:1.85}
+    ul,ol{margin:4px 0 4px 20px}li{margin:3px 0;font-size:13px;color:#374151}
+    table{border-collapse:collapse;width:100%;margin:10px 0;font-size:12px}
+    th{background:#F3F4F6;font-weight:700;text-align:left}th,td{border:1px solid #E5E7EB;padding:6px 10px}
+    hr{border:none;border-top:1px solid #E5E7EB;margin:14px 0}strong{font-weight:700;color:#111827}
+  </style>${mdToHtml(m.minutes || m.transcript)}`;
   pdfEl.style.display = 'block';
-
   try {
     const canvas = await html2canvas(pdfEl, { scale: 2, useCORS: true, logging: false, width: 794 });
     const { jsPDF } = window.jspdf;
     const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-    const pw = pdf.internal.pageSize.getWidth();
-    const ph = pdf.internal.pageSize.getHeight();
-    const margin = 10;
-    const imgW = pw - margin * 2;
+    const pw = pdf.internal.pageSize.getWidth(), ph = pdf.internal.pageSize.getHeight();
+    const margin = 10, imgW = pw - margin * 2;
     const imgH = imgW * (canvas.height / canvas.width);
-    const pageH = ph - margin * 2;
-    const pages = Math.ceil(imgH / pageH);
+    const pageH = ph - margin * 2, pages = Math.ceil(imgH / pageH);
     const imgData = canvas.toDataURL('image/jpeg', 0.92);
     for (let i = 0; i < pages; i++) {
       if (i > 0) pdf.addPage();
@@ -1097,19 +1087,18 @@ async function exportPDF(id) {
 
 function exportWord(id) {
   const m = getMeeting(id); if (!m) return;
-  const body = mdToHtml(m.minutes || m.transcript);
   const html = `<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word'>
 <head><meta charset='utf-8'><style>
 @page{size:A4;margin:2.5cm}
-body{font-family:'맑은 고딕','Malgun Gothic','Apple SD Gothic Neo',Arial;font-size:11pt;line-height:1.85;color:#111827}
+body{font-family:'맑은 고딕','Malgun Gothic',Arial;font-size:11pt;line-height:1.85}
 h1{font-size:18pt;font-weight:bold;margin:0 0 14pt}
-h2{font-size:14pt;font-weight:bold;margin:18pt 0 8pt;padding-bottom:4pt;border-bottom:1pt solid #E5E7EB}
+h2{font-size:14pt;font-weight:bold;margin:18pt 0 8pt;border-bottom:1pt solid #E5E7EB;padding-bottom:4pt}
 h3{font-size:12pt;font-weight:bold;margin:14pt 0 6pt}
 p{margin:4pt 0}ul,ol{margin-left:18pt}li{margin:3pt 0}
 table{border-collapse:collapse;width:100%;margin:8pt 0}
 th{background:#F3F4F6;font-weight:bold}th,td{border:0.5pt solid #D1D5DB;padding:6pt 8pt;font-size:10pt}
 hr{border-top:0.5pt solid #E5E7EB;margin:12pt 0}
-</style></head><body>${body}</body></html>`;
+</style></head><body>${mdToHtml(m.minutes || m.transcript)}</body></html>`;
   dlBlob(new Blob(['﻿' + html], { type: 'application/vnd.ms-word;charset=utf-8' }), safeFilename(m.title) + '.doc');
   showToast('Word 파일로 저장되었습니다');
 }
@@ -1120,10 +1109,10 @@ hr{border-top:0.5pt solid #E5E7EB;margin:12pt 0}
 function mdToHtml(md) {
   if (!md) return '';
   const inl = t => t
-    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-    .replace(/\*(.+?)\*/g, '<em>$1</em>')
-    .replace(/`(.+?)`/g, '<code>$1</code>');
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g,'<em>$1</em>')
+    .replace(/`(.+?)`/g,'<code>$1</code>');
 
   const lines = md.split('\n');
   let html = '', inUl = false, inOl = false, inTable = false, tBuf = [];
@@ -1150,28 +1139,19 @@ function mdToHtml(md) {
   lines.forEach(line => {
     if (line.startsWith('|')) { flushList(); inTable = true; tBuf.push(line); return; }
     if (inTable) flushTable();
-
     const h1 = line.match(/^# (.+)/), h2 = line.match(/^## (.+)/), h3 = line.match(/^### (.+)/);
     if (h1) { flushList(); html += `<h1>${inl(h1[1])}</h1>`; return; }
     if (h2) { flushList(); html += `<h2>${inl(h2[1])}</h2>`; return; }
     if (h3) { flushList(); html += `<h3>${inl(h3[1])}</h3>`; return; }
     if (/^---+$/.test(line)) { flushList(); html += '<hr>'; return; }
-
     const ul = line.match(/^[-*] (.+)/);
-    if (ul) {
-      if (!inUl) { if (inOl) { html += '</ol>'; inOl = false; } html += '<ul>'; inUl = true; }
-      html += `<li>${inl(ul[1])}</li>`; return;
-    }
+    if (ul) { if (!inUl) { if (inOl) { html += '</ol>'; inOl = false; } html += '<ul>'; inUl = true; } html += `<li>${inl(ul[1])}</li>`; return; }
     const ol = line.match(/^\d+\. (.+)/);
-    if (ol) {
-      if (!inOl) { if (inUl) { html += '</ul>'; inUl = false; } html += '<ol>'; inOl = true; }
-      html += `<li>${inl(ol[1])}</li>`; return;
-    }
+    if (ol) { if (!inOl) { if (inUl) { html += '</ul>'; inUl = false; } html += '<ol>'; inOl = true; } html += `<li>${inl(ol[1])}</li>`; return; }
     if (line.trim() === '') { flushList(); html += '<br>'; return; }
     flushList();
     html += `<p>${inl(line)}</p>`;
   });
-
   flushList(); flushTable();
   return html;
 }
@@ -1179,16 +1159,12 @@ function mdToHtml(md) {
 // ════════════════════════════════════════
 // UTILS
 // ════════════════════════════════════════
-function fmtTimer(s) {
-  return `${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;
-}
-function fmtDate(ts) {
-  return new Date(ts).toLocaleDateString('ko-KR', { year:'numeric', month:'long', day:'numeric' });
-}
+function fmtTimer(s) { return `${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`; }
+function fmtDate(ts) { return new Date(ts).toLocaleDateString('ko-KR', { year:'numeric', month:'long', day:'numeric' }); }
 function fmtDuration(s) {
   if (!s || s < 1) return '-';
-  const m = Math.floor(s/60); const r = s%60;
-  return m > 0 ? `${m}분 ${r}초` : `${r}초`;
+  const m = Math.floor(s/60);
+  return m > 0 ? `${m}분 ${s%60}초` : `${s}초`;
 }
 function extractTitle(text) {
   if (!text) return '회의록';
@@ -1196,12 +1172,8 @@ function extractTitle(text) {
   if (h1) return h1[1].replace(/[📋📝💬✅📌📄]/gu, '').trim();
   return (text.split('\n').find(l => l.trim()) || '회의록').slice(0, 45);
 }
-function escHtml(s) {
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-function safeFilename(n) {
-  return (n || '회의록').replace(/[<>:"/\\|?*\x00-\x1f]/g,'_').slice(0,60);
-}
+function escHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function safeFilename(n) { return (n || '회의록').replace(/[<>:"/\\|?*\x00-\x1f]/g,'_').slice(0,60); }
 function dlBlob(blob, name) {
   const url = URL.createObjectURL(blob);
   const a = Object.assign(document.createElement('a'), { href: url, download: name });
@@ -1217,9 +1189,6 @@ function showToast(msg) {
   _toastTm = setTimeout(() => el.className = '', 2800);
 }
 
-// ════════════════════════════════════════
-// START
-// ════════════════════════════════════════
 init();
 </script>
 </body>
