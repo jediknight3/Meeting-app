@@ -779,11 +779,18 @@ function renderView() {
       </div>`;
   } else {
     const title = extractTitle(content);
+    const isTemplate = content.includes('HuggingFace 토큰') || content.includes('아래 녹취록을 참조');
+    const aiBtn = S.hfToken
+      ? `<button class="btn btn-primary btn-full" style="margin-bottom:14px" id="view-ai-btn" onclick="regenAIMinutes('${m.id}')">✨ AI 회의록 생성</button>`
+      : isTemplate
+        ? `<div class="alert alert-orange" style="margin-bottom:14px">💡 설정에서 HuggingFace 토큰을 입력하면 AI가 회의록을 자동 작성합니다</div>`
+        : '';
     el.innerHTML = `
       <div class="tab-group">
         <button class="tab active" onclick="setViewMode('view')">미리보기</button>
         <button class="tab" onclick="setViewMode('edit')">편집</button>
       </div>
+      ${aiBtn}
       <div class="card">
         <div style="margin-bottom:14px">
           <div style="font-size:17px;font-weight:700;margin-bottom:3px">${escHtml(title)}</div>
@@ -799,6 +806,26 @@ function renderView() {
           <div class="dl-btn" onclick="exportWord('${m.id}')"><span class="dl-icon">📘</span><span class="dl-label">Word</span></div>
         </div>
       </div>`;
+  }
+}
+
+async function regenAIMinutes(id) {
+  const m = getMeeting(id); if (!m || !m.transcript) { showToast('녹취록이 없습니다'); return; }
+  if (!S.hfToken) { showToast('설정에서 HuggingFace 토큰을 입력해주세요'); return; }
+  const btn = document.getElementById('view-ai-btn');
+  if (btn) { btn.disabled = true; btn.textContent = '⏳ AI 작성 중...'; }
+  try {
+    const today = new Date().toLocaleDateString('ko-KR', { year:'numeric', month:'long', day:'numeric', weekday:'long' });
+    const minutes = await generateWithHuggingFace(m.transcript.slice(0, 3500), today);
+    m.minutes = minutes;
+    const idx = S.meetings.findIndex(x => x.id === id);
+    if (idx >= 0) { S.meetings[idx].minutes = minutes; S.meetings[idx].title = extractTitle(minutes); }
+    saveMeetingsData();
+    showToast('✅ AI 회의록 완성!');
+    renderView();
+  } catch(e) {
+    showToast('AI 오류: ' + e.message);
+    if (btn) { btn.disabled = false; btn.textContent = '✨ AI 회의록 생성'; }
   }
 }
 function setViewMode(mode) { S.viewMode = mode; renderView(); }
