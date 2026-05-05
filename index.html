@@ -14,15 +14,12 @@
   --red-l:     #FEF2F2;
   --orange:    #F59E0B;
   --orange-l:  #FFFBEB;
-
   --gray-900: #111827; --gray-800: #1F2937; --gray-700: #374151;
   --gray-600: #4B5563; --gray-500: #6B7280; --gray-400: #9CA3AF;
   --gray-300: #D1D5DB; --gray-200: #E5E7EB; --gray-100: #F3F4F6;
   --gray-50:  #F9FAFB; --white: #FFFFFF;
-
   --bg: #F3F4F6; --card: #FFFFFF; --text: #111827;
   --sub: #6B7280; --border: #E5E7EB;
-
   --radius-s: 8px; --radius-m: 12px; --radius-l: 16px;
   --shadow-s: 0 1px 3px rgba(0,0,0,.08);
   --shadow-m: 0 4px 16px rgba(0,0,0,.08);
@@ -30,16 +27,12 @@
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html, body {
-  height: 100%;
-  background: var(--bg);
-  color: var(--text);
+  height: 100%; background: var(--bg); color: var(--text);
   font-family: -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
-  font-size: 14px;
-  line-height: 1.5;
+  font-size: 14px; line-height: 1.5;
 }
 #app { display: flex; flex-direction: column; height: 100vh; max-width: 480px; margin: 0 auto; background: var(--bg); }
 
-/* Top Bar */
 #topbar {
   background: var(--card); border-bottom: 1px solid var(--border);
   padding: 0 16px; height: var(--top-h);
@@ -53,7 +46,6 @@ html, body {
 .page { display: none; padding: 16px; }
 .page.active { display: block; }
 
-/* Bottom Nav */
 #bottom-nav {
   position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
   width: 100%; max-width: 480px; height: var(--nav-h);
@@ -69,10 +61,8 @@ html, body {
 .nav-btn.active { color: var(--primary); }
 .nav-icon { font-size: 22px; line-height: 1; }
 
-/* Cards */
 .card { background: var(--card); border-radius: var(--radius-l); padding: 16px; box-shadow: var(--shadow-s); margin-bottom: 12px; }
 
-/* Buttons */
 .btn {
   display: inline-flex; align-items: center; justify-content: center;
   gap: 6px; padding: 11px 18px; border-radius: var(--radius-m);
@@ -107,7 +97,6 @@ html, body {
 #timer { font-size: 34px; font-weight: 700; margin: 16px 0 6px; font-variant-numeric: tabular-nums; letter-spacing: -1px; }
 #record-status { font-size: 14px; color: var(--sub); text-align: center; max-width: 280px; min-height: 20px; }
 
-/* Waveform animation */
 .wave-bar { display: inline-block; width: 4px; border-radius: 2px; background: var(--red); margin: 0 2px; animation: wave 1s ease-in-out infinite; }
 .wave-bar:nth-child(2) { animation-delay: .1s; }
 .wave-bar:nth-child(3) { animation-delay: .2s; }
@@ -116,26 +105,6 @@ html, body {
 @keyframes wave { 0%,100%{height:6px;opacity:.4} 50%{height:20px;opacity:1} }
 #wave-indicator { display: none; align-items: flex-end; height: 24px; margin-top: 8px; }
 #wave-indicator.active { display: flex; }
-
-/* Speaker buttons */
-.spk-btn {
-  padding: 7px 14px; border-radius: 999px; border: 1.5px solid var(--border);
-  background: var(--card); font-size: 13px; font-weight: 600; cursor: pointer;
-  transition: all .15s; font-family: inherit; color: var(--sub);
-}
-.spk-btn:nth-child(1).spk-btn-active { background: #EEF2FF; border-color: #4338CA; color: #4338CA; }
-.spk-btn:nth-child(2).spk-btn-active { background: #ECFDF5; border-color: #065F46; color: #065F46; }
-.spk-btn:nth-child(3).spk-btn-active { background: #FFF7ED; border-color: #9A3412; color: #9A3412; }
-.spk-btn:nth-child(4).spk-btn-active { background: #FDF4FF; border-color: #7E22CE; color: #7E22CE; }
-
-/* Live transcript */
-#live-transcript-card { display: none; }
-#live-transcript {
-  font-size: 13px; color: var(--gray-600); line-height: 1.7;
-  max-height: 120px; overflow-y: auto; word-break: break-word;
-  background: var(--gray-50); border-radius: var(--radius-s); padding: 10px 12px;
-}
-.speech-unavail { font-size: 13px; color: var(--orange); background: var(--orange-l); border-radius: var(--radius-s); padding: 10px 12px; margin-top: 8px; }
 
 /* Processing */
 .progress-step { display: flex; align-items: center; gap: 12px; padding: 11px 0; border-bottom: 1px solid var(--border); }
@@ -149,8 +118,18 @@ html, body {
 .step-label { font-size: 14px; font-weight: 600; }
 .step-desc  { font-size: 12px; color: var(--sub); margin-top: 1px; }
 
-/* Transcript */
-.transcript-box { background: var(--gray-50); border-radius: var(--radius-m); padding: 14px; max-height: 240px; overflow-y: auto; font-size: 14px; color: var(--gray-700); line-height: 1.75; white-space: pre-wrap; word-break: break-word; }
+/* Speaker Transcript */
+.transcript-box { background: var(--gray-50); border-radius: var(--radius-m); padding: 14px; max-height: 260px; overflow-y: auto; }
+.speaker-line { display: flex; gap: 8px; margin-bottom: 10px; align-items: flex-start; }
+.speaker-line:last-child { margin-bottom: 0; }
+.speaker-badge { font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 20px; white-space: nowrap; flex-shrink: 0; margin-top: 2px; }
+.speaker-text { font-size: 14px; color: var(--gray-700); line-height: 1.65; }
+.speaker-solo { font-size: 14px; color: var(--gray-700); line-height: 1.75; white-space: pre-wrap; word-break: break-word; }
+.spk-1 { background: #EEF2FF; color: #4338CA; }
+.spk-2 { background: #ECFDF5; color: #065F46; }
+.spk-3 { background: #FFF7ED; color: #9A3412; }
+.spk-4 { background: #FDF4FF; color: #7E22CE; }
+.spk-5 { background: #FFFBEB; color: #92400E; }
 
 /* Markdown */
 .md-body { font-size: 14px; line-height: 1.85; }
@@ -181,7 +160,6 @@ html, body {
 .meeting-meta  { font-size: 12px; color: var(--sub); }
 .meeting-arrow { color: var(--gray-300); font-size: 20px; }
 
-/* Downloads */
 .dl-btns { display: flex; gap: 8px; }
 .dl-btn { flex: 1; padding: 12px 6px; border-radius: var(--radius-m); border: 1.5px solid var(--border); background: var(--card); cursor: pointer; text-align: center; transition: all .15s; }
 .dl-btn:hover { border-color: var(--primary); background: var(--primary-l); }
@@ -189,13 +167,11 @@ html, body {
 .dl-icon  { font-size: 22px; display: block; margin-bottom: 4px; }
 .dl-label { font-size: 11px; font-weight: 700; color: var(--sub); }
 
-/* Empty */
 .empty-state { text-align: center; padding: 60px 20px; }
 .empty-ico  { font-size: 52px; margin-bottom: 14px; }
 .empty-text { font-size: 16px; font-weight: 600; color: var(--gray-600); margin-bottom: 6px; }
 .empty-sub  { font-size: 13px; color: var(--gray-400); }
 
-/* Toast */
 #toast {
   position: fixed; bottom: calc(var(--nav-h) + 16px); left: 50%; transform: translateX(-50%);
   background: var(--gray-800); color: #fff; padding: 10px 22px; border-radius: 999px;
@@ -204,7 +180,6 @@ html, body {
 }
 #toast.show { opacity: 1; }
 
-/* Settings */
 .setting-section { margin-bottom: 20px; }
 .section-label { font-size: 12px; font-weight: 700; color: var(--sub); text-transform: uppercase; letter-spacing: .6px; margin-bottom: 10px; }
 .setting-card { background: var(--card); border-radius: var(--radius-l); overflow: hidden; box-shadow: var(--shadow-s); margin-bottom: 8px; }
@@ -213,13 +188,12 @@ html, body {
 .setting-row label { font-size: 14px; font-weight: 600; display: block; margin-bottom: 8px; }
 .setting-row input {
   width: 100%; padding: 10px 12px; border: 1.5px solid var(--border);
-  border-radius: var(--radius-s); font-size: 13px; background: var(--gray-50);
+  border-radius: var(--radius-s); font-size: 14px; background: var(--gray-50);
   color: var(--text); outline: none; font-family: monospace; transition: border-color .15s;
 }
 .setting-row input:focus { border-color: var(--primary); background: #fff; }
-.setting-hint { font-size: 12px; color: var(--sub); margin-top: 6px; }
+.setting-hint { font-size: 12px; color: var(--sub); margin-top: 6px; line-height: 1.6; }
 
-/* Tabs */
 .tab-group { display: flex; gap: 4px; background: var(--gray-100); border-radius: var(--radius-m); padding: 4px; margin-bottom: 14px; }
 .tab { flex: 1; padding: 8px; border: none; background: none; border-radius: var(--radius-s); font-size: 13px; font-weight: 600; cursor: pointer; color: var(--sub); transition: all .15s; font-family: inherit; }
 .tab.active { background: #fff; color: var(--text); box-shadow: var(--shadow-s); }
@@ -230,6 +204,7 @@ html, body {
 .alert { padding: 12px 14px; border-radius: var(--radius-m); margin-bottom: 12px; font-size: 13px; }
 .alert-info  { background: var(--primary-l); color: #1E3A8A; border-left: 3px solid var(--primary); }
 .alert-green { background: var(--green-l);   color: #065F46; border-left: 3px solid var(--green); }
+.alert-warn  { background: var(--orange-l);  color: #92400E; border-left: 3px solid var(--orange); }
 
 #pdf-content { position: fixed; left: -9999px; top: 0; width: 794px; background: #fff; padding: 50px; font-family: -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', Arial, sans-serif; font-size: 13px; line-height: 1.85; display: none; }
 
@@ -263,22 +238,6 @@ html, body {
         <div id="record-status">버튼을 눌러 녹음을 시작하세요</div>
       </div>
 
-      <div id="speaker-controls" class="card" style="display:none">
-        <div class="section-label" style="margin-bottom:8px">🙋 현재 발화자</div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px">
-          <button class="spk-btn spk-btn-active" id="spk-btn-1" onclick="setSpeaker(1)">화자 1</button>
-          <button class="spk-btn" id="spk-btn-2" onclick="setSpeaker(2)">화자 2</button>
-          <button class="spk-btn" id="spk-btn-3" onclick="setSpeaker(3)">화자 3</button>
-          <button class="spk-btn" id="spk-btn-4" onclick="setSpeaker(4)">화자 4</button>
-        </div>
-        <div style="font-size:12px;color:var(--sub)">발화자가 바뀔 때 해당 버튼을 눌러주세요</div>
-      </div>
-
-      <div id="live-transcript-card" class="card" style="display:none">
-        <div class="section-label" style="margin-bottom:8px">🎤 실시간 전사</div>
-        <div id="live-transcript">말하면 여기에 텍스트가 나타납니다...</div>
-      </div>
-
       <div id="record-controls" style="display:none">
         <div style="display:flex;gap:10px;justify-content:center;margin-bottom:16px">
           <button class="btn btn-danger" onclick="stopAndProcess()">⏹ 완료</button>
@@ -292,10 +251,10 @@ html, body {
       </div>
 
       <div id="transcript-card" class="card" style="display:none">
-        <div class="section-label" style="margin-bottom:10px">📝 녹취록</div>
+        <div class="section-label" style="margin-bottom:10px">🗣️ 대화 녹취록</div>
         <div id="transcript-box" class="transcript-box"></div>
         <div style="margin-top:12px">
-          <button class="btn btn-primary btn-full" id="gen-btn" onclick="retryMinutes()">✨ 회의록 다시 생성</button>
+          <button class="btn btn-primary btn-full" id="gen-btn" onclick="retryMinutes()" style="display:none">✨ 회의록 다시 생성</button>
         </div>
       </div>
     </div>
@@ -307,18 +266,23 @@ html, body {
 
     <!-- SETTINGS -->
     <div id="page-settings" class="page">
-      <div class="alert alert-green">✅ Claude AI가 회의록을 자동 작성합니다.</div>
-      <div class="alert alert-info">🔑 Anthropic API 키를 입력하면 바로 사용 가능합니다.</div>
+      <div class="alert alert-green">✅ 완전 무료! Gemini API 키 1개만 있으면 됩니다.</div>
+      <div class="alert alert-warn">⚠️ 키 발급 시 <strong>aistudio.google.com</strong>에서만 발급하세요. Google Cloud Console에서 발급하면 무료 한도가 0이 됩니다.</div>
+      <div class="alert alert-info">🤖 Gemini가 여러 화자를 자동으로 인식해 대화 형식으로 전사합니다.</div>
 
       <div class="setting-section">
         <div class="section-label">API 키 설정</div>
         <div class="setting-card">
           <div class="setting-row">
-            <label>🤖 Anthropic API Key</label>
-            <input type="password" id="set-anthropic-key" placeholder="sk-ant-..." autocomplete="off" spellcheck="false">
+            <label>🔑 Google Gemini API Key</label>
+            <input type="password" id="set-gemini" placeholder="AIza..." autocomplete="off" spellcheck="false">
             <div class="setting-hint">
-              발급: <strong>console.anthropic.com</strong> → API Keys → Create Key<br>
-              브라우저에만 저장됩니다. Claude Haiku 사용 (저렴함)
+              <strong>발급 방법 (반드시 이 순서대로):</strong><br>
+              1. <strong>aistudio.google.com</strong> 접속 (Google Cloud 아님)<br>
+              2. 왼쪽 메뉴 → <strong>Get API key</strong><br>
+              3. <strong>Create API key in new project</strong> 클릭<br>
+              4. 생성된 AIza... 키를 여기에 입력<br><br>
+              무료: 분당 15회, 하루 1,500회
             </div>
           </div>
         </div>
@@ -362,31 +326,20 @@ html, body {
 // STATE
 // ════════════════════════════════════════
 const S = {
-  page: 'home',
-  recording: false,
-  processing: false,
-  timerSec: 0,
-  timerInterval: null,
-  mediaRecorder: null,
-  audioChunks: [],
-  stream: null,
-  recognition: null,
-  speechTranscript: '',
-  currentSpeaker: 1,
-  speakerChanged: true,
-  currentDuration: 0,
-  currentMeeting: null,
-  meetings: [],
-  anthropicKey: '',
-  viewMode: 'view',
+  page: 'home', recording: false, processing: false,
+  timerSec: 0, timerInterval: null,
+  mediaRecorder: null, audioChunks: [], stream: null,
+  transcript: '', currentDuration: 0,
+  currentMeeting: null, meetings: [],
+  geminiKey: '', viewMode: 'view',
 };
 
 // ════════════════════════════════════════
 // INIT
 // ════════════════════════════════════════
 function init() {
-  S.anthropicKey = localStorage.getItem('ma_anthropic_key') || '';
-  S.meetings     = JSON.parse(localStorage.getItem('ma_meetings') || '[]');
+  S.geminiKey = localStorage.getItem('ma_gemini') || '';
+  S.meetings  = JSON.parse(localStorage.getItem('ma_meetings') || '[]');
   renderHome();
   updateSettingsCount();
 }
@@ -429,7 +382,7 @@ function renderHome() {
     el.innerHTML = `<div class="empty-state">
       <div class="empty-ico">📋</div>
       <div class="empty-text">저장된 회의록이 없습니다</div>
-      <div class="empty-sub">아래 녹음 탭에서 새 회의를 시작하세요</div>
+      <div class="empty-sub">녹음 탭에서 새 회의를 시작하세요</div>
     </div>`; return;
   }
   const sorted = [...S.meetings].sort((a, b) => b.createdAt - a.createdAt);
@@ -451,32 +404,26 @@ function getMeeting(id) { return S.meetings.find(m => m.id === id); }
 // ════════════════════════════════════════
 function resetRecordPage() {
   stopMediaTracks();
-  stopSpeechRecognition();
-  S.recording = false; S.audioChunks = []; S.speechTranscript = '';
-  S.currentSpeaker = 1; S.speakerChanged = true;
+  S.recording = false; S.audioChunks = []; S.transcript = '';
   S.timerSec = 0; S.currentDuration = 0;
   clearInterval(S.timerInterval);
   setRecordBtn('', '🎙️');
   document.getElementById('timer').textContent = '00:00';
   document.getElementById('record-status').textContent = '버튼을 눌러 녹음을 시작하세요';
   document.getElementById('wave-indicator').classList.remove('active');
-  document.getElementById('speaker-controls').style.display = 'none';
-  document.getElementById('live-transcript-card').style.display = 'none';
-  document.getElementById('live-transcript').textContent = '말하면 여기에 텍스트가 나타납니다...';
   document.getElementById('record-controls').style.display = 'none';
   document.getElementById('processing-card').style.display = 'none';
   document.getElementById('transcript-card').style.display = 'none';
-  setSpeakerUI(1);
 }
 
 async function toggleRecording() {
   if (S.processing) return;
+  if (!S.geminiKey) {
+    showToast('설정에서 Gemini API 키를 먼저 입력하세요');
+    goPage('settings');
+    return;
+  }
   if (!S.recording) {
-    if (!S.anthropicKey) {
-      showToast('설정에서 Anthropic API 키를 먼저 입력해주세요');
-      goPage('settings');
-      return;
-    }
     await startRecording();
   } else {
     pauseRecording();
@@ -491,20 +438,14 @@ async function startRecording() {
     return;
   }
   S.audioChunks = [];
-  S.speechTranscript = '';
   const mimeType = getBestMimeType();
   S.mediaRecorder = new MediaRecorder(S.stream, mimeType ? { mimeType } : {});
   S.mediaRecorder.ondataavailable = e => { if (e.data.size > 0) S.audioChunks.push(e.data); };
   S.mediaRecorder.start(1000);
   S.recording = true; S.timerSec = 0;
 
-  S.currentSpeaker = 1; S.speakerChanged = true;
-  setSpeakerUI(1);
-  const hasSpeech = startSpeechRecognition();
   setRecordBtn('recording', '⏸');
   document.getElementById('record-status').textContent = '녹음 중... 자유롭게 대화하세요';
-  document.getElementById('speaker-controls').style.display = hasSpeech ? 'block' : 'none';
-  document.getElementById('live-transcript-card').style.display = hasSpeech ? 'block' : 'none';
   document.getElementById('record-controls').style.display = 'block';
   document.getElementById('wave-indicator').classList.add('active');
   document.getElementById('processing-card').style.display = 'none';
@@ -518,17 +459,15 @@ async function startRecording() {
 
 function pauseRecording() {
   if (S.mediaRecorder?.state === 'recording') S.mediaRecorder.pause();
-  stopSpeechRecognition();
   clearInterval(S.timerInterval);
   S.recording = false;
   setRecordBtn('paused', '▶️');
-  document.getElementById('record-status').textContent = '일시정지됨 — 버튼을 눌러 계속하세요';
+  document.getElementById('record-status').textContent = '일시정지 — 버튼을 눌러 계속하세요';
   document.getElementById('wave-indicator').classList.remove('active');
 }
 
 function resumeRecording() {
   if (S.mediaRecorder?.state === 'paused') S.mediaRecorder.resume();
-  startSpeechRecognition();
   S.recording = true;
   setRecordBtn('recording', '⏸');
   document.getElementById('record-status').textContent = '녹음 중... 자유롭게 대화하세요';
@@ -537,9 +476,7 @@ function resumeRecording() {
 }
 
 document.getElementById('record-btn').addEventListener('click', function() {
-  if (S.mediaRecorder && !S.recording && S.mediaRecorder.state === 'paused') {
-    resumeRecording();
-  }
+  if (S.mediaRecorder && !S.recording && S.mediaRecorder.state === 'paused') resumeRecording();
 }, true);
 
 function setRecordBtn(cls, icon) {
@@ -552,7 +489,7 @@ function stopMediaTracks() {
   if (S.stream) S.stream.getTracks().forEach(t => t.stop());
   S.mediaRecorder = null; S.stream = null;
 }
-function cancelRecording() { stopMediaTracks(); stopSpeechRecognition(); resetRecordPage(); }
+function cancelRecording() { stopMediaTracks(); resetRecordPage(); }
 
 function getBestMimeType() {
   const types = ['audio/webm;codecs=opus', 'audio/webm', 'audio/mp4;codecs=mp4a.40.2', 'audio/mp4', 'audio/ogg;codecs=opus'];
@@ -563,49 +500,54 @@ async function stopAndProcess() {
   clearInterval(S.timerInterval);
   const duration = S.timerSec;
   S.recording = false;
-  stopSpeechRecognition();
   document.getElementById('wave-indicator').classList.remove('active');
-  document.getElementById('speaker-controls').style.display = 'none';
-  document.getElementById('live-transcript-card').style.display = 'none';
 
-  // Stop MediaRecorder
-  await new Promise(resolve => {
+  const blob = await new Promise(resolve => {
     const finish = () => {
       if (S.stream) S.stream.getTracks().forEach(t => t.stop());
-      resolve();
+      resolve(new Blob(S.audioChunks, { type: S.mediaRecorder?.mimeType || 'audio/webm' }));
     };
     if (!S.mediaRecorder || S.mediaRecorder.state === 'inactive') { finish(); return; }
     S.mediaRecorder.onstop = finish;
     S.mediaRecorder.stop();
   });
 
-  S.currentDuration = duration;
-  const transcript = S.speechTranscript.trim();
-
-  if (!transcript) {
-    document.getElementById('record-status').textContent = '음성이 인식되지 않았습니다. 다시 시도해주세요.';
+  if (blob.size < 1000) {
+    document.getElementById('record-status').textContent = '녹음 시간이 너무 짧습니다. 다시 시도하세요.';
     setRecordBtn('', '🎙️');
-    showToast('음성을 인식하지 못했습니다');
     return;
   }
 
+  S.currentDuration = duration;
   S.processing = true;
   setRecordBtn('idle', '⏳');
   document.getElementById('record-controls').style.display = 'none';
+  document.getElementById('record-status').textContent = 'Gemini가 분석 중...';
 
-  // Show transcript
-  document.getElementById('transcript-box').textContent = transcript;
-  document.getElementById('transcript-card').style.display = 'block';
-  document.getElementById('gen-btn').style.display = 'none';
-
-  // Generate minutes
   showProcessing([
-    { id: 'step-min', label: 'Claude AI 회의록 작성', desc: 'Claude Haiku가 회의록을 작성 중...', status: 'running' },
+    { id: 'step-trans', label: '화자 분리 + 음성 전사', desc: 'Gemini가 각 화자의 목소리를 분석 중...', status: 'running' },
+    { id: 'step-min',   label: '회의록 작성',           desc: '전사 완료 후 Claude 스타일로 회의록 생성', status: 'waiting' },
   ]);
-  document.getElementById('record-status').textContent = 'Claude가 회의록을 작성 중...';
 
+  // Step 1: Transcription with speaker diarization
+  let transcript = '';
   try {
-    const minutes = await generateWithClaude(transcript);
+    transcript = await transcribeWithSpeakers(blob);
+    S.transcript = transcript;
+    updateStep('step-trans', 'done');
+    showTranscript(transcript);
+  } catch (err) {
+    updateStep('step-trans', 'error', err.message);
+    document.getElementById('record-status').textContent = '전사 실패: ' + err.message;
+    S.processing = false; setRecordBtn('', '🎙️');
+    return;
+  }
+
+  // Step 2: Meeting minutes
+  updateStep('step-min', 'running');
+  document.getElementById('record-status').textContent = 'Gemini가 회의록을 작성 중...';
+  try {
+    const minutes = await generateMeetingMinutes(transcript);
     updateStep('step-min', 'done');
     const meeting = saveMeeting({ transcript, minutes, duration, createdAt: Date.now() });
     document.getElementById('record-status').textContent = '✅ 회의록 완성!';
@@ -622,23 +564,27 @@ async function stopAndProcess() {
 }
 
 async function retryMinutes() {
-  if (!S.speechTranscript.trim()) { showToast('녹취록이 없습니다'); return; }
-  document.getElementById('gen-btn').disabled = true;
-  document.getElementById('gen-btn').textContent = '⏳ 생성 중...';
-  showProcessing([{ id: 'step-min2', label: 'Claude AI 회의록 작성', desc: 'Claude Haiku가 작성 중...', status: 'running' }]);
+  if (!S.transcript) { showToast('녹취록이 없습니다'); return; }
+  const btn = document.getElementById('gen-btn');
+  btn.disabled = true; btn.textContent = '⏳ 생성 중...';
+  showProcessing([{ id: 'step-min2', label: '회의록 작성', desc: 'Gemini가 회의록을 작성 중...', status: 'running' }]);
   document.getElementById('processing-card').style.display = 'block';
   try {
-    const minutes = await generateWithClaude(S.speechTranscript.trim());
+    const minutes = await generateMeetingMinutes(S.transcript);
     updateStep('step-min2', 'done');
-    const meeting = saveMeeting({ transcript: S.speechTranscript.trim(), minutes, duration: S.currentDuration, createdAt: Date.now() });
+    const meeting = saveMeeting({ transcript: S.transcript, minutes, duration: S.currentDuration, createdAt: Date.now() });
     showToast('회의록이 생성되었습니다');
     setTimeout(() => goPage('view', meeting), 500);
   } catch (err) {
     updateStep('step-min2', 'error', err.message);
     showToast('오류: ' + err.message);
-    document.getElementById('gen-btn').disabled = false;
-    document.getElementById('gen-btn').textContent = '✨ 회의록 다시 생성';
+    btn.disabled = false; btn.textContent = '✨ 회의록 다시 생성';
   }
+}
+
+function showTranscript(text) {
+  document.getElementById('transcript-box').innerHTML = formatSpeakerTranscript(text);
+  document.getElementById('transcript-card').style.display = 'block';
 }
 
 function showProcessing(steps) {
@@ -658,153 +604,147 @@ function updateStep(id, status, desc) {
 }
 
 // ════════════════════════════════════════
-// SPEAKER CONTROLS
+// GEMINI API — 화자 분리 전사
 // ════════════════════════════════════════
-function setSpeaker(num) {
-  if (S.currentSpeaker === num) return;
-  S.currentSpeaker = num;
-  S.speakerChanged = true;
-  setSpeakerUI(num);
-}
+async function transcribeWithSpeakers(blob) {
+  const base64 = await blobToBase64(blob);
+  const mimeType = blob.type || 'audio/webm';
 
-function setSpeakerUI(num) {
-  for (let i = 1; i <= 4; i++) {
-    const btn = document.getElementById('spk-btn-' + i);
-    if (!btn) continue;
-    btn.className = 'spk-btn' + (i === num ? ' spk-btn-active' : '');
-  }
-}
+  const prompt = `이 오디오를 한국어로 전사해주세요.
 
-// ════════════════════════════════════════
-// WEB SPEECH API
-// ════════════════════════════════════════
-function startSpeechRecognition() {
-  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SR) return false;
+여러 명이 대화하는 경우 반드시 각 화자를 구분해서 작성하세요.
+출력 형식 (화자가 여럿인 경우):
+화자1: [발화 내용]
+화자2: [발화 내용]
+화자1: [발화 내용]
 
-  S.recognition = new SR();
-  S.recognition.lang = 'ko-KR';
-  S.recognition.continuous = true;
-  S.recognition.interimResults = true;
+화자가 1명인 경우에는 화자 구분 없이 전체 내용을 그대로 전사하세요.
+말을 끊지 말고 전체 내용을 빠짐없이 전사하세요.`;
 
-  let interim = '';
+  const res = await callGemini([
+    { inlineData: { mimeType, data: base64 } },
+    { text: prompt }
+  ], { temperature: 0.1 });
 
-  S.recognition.onresult = (e) => {
-    interim = '';
-    for (let i = e.resultIndex; i < e.results.length; i++) {
-      if (e.results[i].isFinal) {
-        const text = e.results[i][0].transcript.trim();
-        if (!text) continue;
-        if (S.speakerChanged || !S.speechTranscript) {
-          S.speechTranscript += (S.speechTranscript ? '\n' : '') + '화자' + S.currentSpeaker + ': ' + text;
-          S.speakerChanged = false;
-        } else {
-          S.speechTranscript += ' ' + text;
-        }
-      } else {
-        interim += e.results[i][0].transcript;
-      }
-    }
-    const el = document.getElementById('live-transcript');
-    if (el) {
-      const display = S.speechTranscript + (interim ? ' ' + interim : '');
-      el.textContent = display || '말하면 여기에 텍스트가 나타납니다...';
-      el.scrollTop = el.scrollHeight;
-    }
-  };
-
-  S.recognition.onerror = (e) => {
-    if (e.error !== 'no-speech' && e.error !== 'aborted') console.log('Speech error:', e.error);
-  };
-
-  S.recognition.onend = () => {
-    if (S.recording) {
-      try { S.recognition.start(); } catch(e) {}
-    }
-  };
-
-  try { S.recognition.start(); return true; } catch(e) { return false; }
-}
-
-function stopSpeechRecognition() {
-  if (S.recognition) {
-    try { S.recognition.stop(); } catch(e) {}
-    S.recognition = null;
-  }
+  return res.trim();
 }
 
 // ════════════════════════════════════════
-// CLAUDE API — 직접 호출
+// GEMINI API — 회의록 생성
 // ════════════════════════════════════════
-async function generateWithClaude(transcript) {
-  if (!S.anthropicKey) throw new Error('설정에서 Anthropic API 키를 먼저 입력해주세요');
-
+async function generateMeetingMinutes(transcript) {
   const today = new Date().toLocaleDateString('ko-KR', { year:'numeric', month:'long', day:'numeric', weekday:'long' });
-  const maxLen = 4000;
-  const truncated = transcript.length > maxLen ? transcript.slice(0, maxLen) + '\n...(이하 생략)' : transcript;
+  const hasSpeakers = /^화자\d+:/m.test(transcript);
 
-  const hasSpeakers = /^화자\d+:/m.test(truncated);
-  const prompt = `당신은 전문 회의록 작성 전문가입니다. 아래 회의 녹취록을 바탕으로 체계적인 회의록을 마크다운 형식으로 작성해주세요.
+  const prompt = `당신은 전문 회의록 작성 전문가입니다.
+아래는 회의 녹취록입니다${hasSpeakers ? ' (화자별로 구분되어 있습니다)' : ''}.
+이를 바탕으로 체계적인 회의록을 마크다운 형식으로 작성해주세요.
 
 오늘 날짜: ${today}
-${hasSpeakers ? '녹취록에는 화자별 발언이 구분되어 있습니다. 각 화자의 발언 내용을 정확히 반영해주세요.' : ''}
-
-녹취록:
-${truncated}
-
-아래 형식으로 정확히 작성해주세요:
 
 # [회의 주제를 파악하여 간결한 제목]
 
 ## 📋 기본 정보
 - **날짜**: ${today}
-- **참석자**: [파악된 화자 수 및 이름 (예: 화자1, 화자2)]
-- **주제**: [핵심 주제 한 줄]
+- **참석자**: [녹취록에서 파악된 화자 및 인원]
+- **주제**: [핵심 주제]
 
 ## 📝 회의 요약
-[2-3문장으로 핵심 내용 요약]
+[2-3문장 핵심 요약]
 
 ## 💬 주요 논의사항
-${hasSpeakers ? '(화자별 주요 발언을 포함해 작성)' : ''}
-1. [주요 논의사항]
-2. [주요 논의사항]
+1. [논의사항]
+2. [논의사항]
 
 ## ✅ 결정사항
-1. [결정된 사항]
+1. [결정사항]
 
 ## 📌 액션아이템
 | 담당자 | 내용 | 기한 |
 |--------|------|------|
-| [이름/화자] | [해야 할 일] | [기한] |
+| [이름/화자] | [할 일] | [기한] |
 
 ## 🗣️ 전체 녹취록
-${truncated}
+${transcript}
 
 ---
-*Meeting Minutes App — Claude AI 자동 생성*`;
+*Meeting Minutes App — Gemini AI 자동 생성*
 
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': S.anthropicKey,
-      'anthropic-version': '2023-06-01',
-    },
-    body: JSON.stringify({
-      model: 'claude-haiku-4-5-20251001',
-      max_tokens: 2048,
-      messages: [{ role: 'user', content: prompt }],
-    }),
-  });
+녹취록:
+${transcript}`;
 
+  return await callGemini([{ text: prompt }], { maxOutputTokens: 4096, temperature: 0.3 });
+}
+
+// ════════════════════════════════════════
+// GEMINI API — 공통 호출
+// ════════════════════════════════════════
+async function callGemini(parts, config = {}) {
+  const body = {
+    contents: [{ parts }],
+    generationConfig: config,
+  };
+  const res = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${S.geminiKey}`,
+    { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }
+  );
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));
-    throw new Error(err.error?.message || 'Anthropic API 오류: HTTP ' + res.status);
+    const msg = err.error?.message || '';
+    if (msg.includes('quota') || msg.includes('RESOURCE_EXHAUSTED')) {
+      throw new Error('API 할당량 초과. 설정의 API 키 발급 방법을 확인하고 새 키를 발급하세요.');
+    }
+    throw new Error(msg || 'Gemini HTTP ' + res.status);
   }
   const data = await res.json();
-  const text = data.content?.[0]?.text;
-  if (!text) throw new Error('Claude 응답이 비어 있습니다');
+  const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+  if (!text) throw new Error('Gemini 응답이 비어 있습니다');
   return text;
+}
+
+function blobToBase64(blob) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result.split(',')[1]);
+    reader.onerror = reject;
+    reader.readAsDataURL(blob);
+  });
+}
+
+// ════════════════════════════════════════
+// SPEAKER TRANSCRIPT RENDERER
+// ════════════════════════════════════════
+const speakerColorMap = {};
+const SPEAKER_COLORS = ['spk-1','spk-2','spk-3','spk-4','spk-5'];
+
+function getSpeakerClass(name) {
+  if (!speakerColorMap[name]) {
+    const idx = Object.keys(speakerColorMap).length % SPEAKER_COLORS.length;
+    speakerColorMap[name] = SPEAKER_COLORS[idx];
+  }
+  return speakerColorMap[name];
+}
+
+function formatSpeakerTranscript(text) {
+  Object.keys(speakerColorMap).forEach(k => delete speakerColorMap[k]);
+  const lines = text.split('\n').filter(l => l.trim());
+  const hasSpeakers = lines.some(l => /^화자\d+:/i.test(l.trim()));
+
+  if (!hasSpeakers) {
+    return `<div class="speaker-solo">${escHtml(text)}</div>`;
+  }
+
+  return lines.map(line => {
+    const m = line.match(/^(화자\d+):\s*(.+)/i);
+    if (m) {
+      const cls = getSpeakerClass(m[1].trim());
+      return `<div class="speaker-line">
+        <span class="speaker-badge ${cls}">${escHtml(m[1])}</span>
+        <span class="speaker-text">${escHtml(m[2].trim())}</span>
+      </div>`;
+    }
+    return line.trim() ? `<p style="color:var(--gray-500);font-size:13px;padding:2px 0">${escHtml(line)}</p>` : '';
+  }).join('');
 }
 
 // ════════════════════════════════════════
@@ -868,15 +808,14 @@ function confirmDelete(id) {
 // SETTINGS
 // ════════════════════════════════════════
 function renderSettings() {
-  document.getElementById('set-anthropic-key').value = S.anthropicKey;
+  document.getElementById('set-gemini').value = S.geminiKey;
   updateSettingsCount();
 }
 function saveSettings() {
-  const key = document.getElementById('set-anthropic-key').value.trim();
+  const key = document.getElementById('set-gemini').value.trim();
   if (!key) { showToast('API 키를 입력해주세요'); return; }
-  if (!key.startsWith('sk-ant-')) { showToast('올바른 Anthropic API 키 형식이 아닙니다 (sk-ant-...)'); return; }
-  S.anthropicKey = key;
-  localStorage.setItem('ma_anthropic_key', key);
+  S.geminiKey = key;
+  localStorage.setItem('ma_gemini', key);
   showToast('저장되었습니다 ✓');
 }
 function updateSettingsCount() {
@@ -918,7 +857,7 @@ async function exportPDF(id) {
   if (typeof html2canvas === 'undefined' || typeof window.jspdf === 'undefined') { showToast('잠시 후 다시 시도하세요'); return; }
   showToast('PDF 생성 중...');
   const pdfEl = document.getElementById('pdf-content');
-  pdfEl.innerHTML = `<style>h1{font-size:22px;font-weight:700;margin:0 0 16px}h2{font-size:16px;font-weight:700;margin:20px 0 8px;padding-bottom:6px;border-bottom:2px solid #E5E7EB}h3{font-size:14px;font-weight:600;margin:14px 0 6px;color:#374151}p{margin:4px 0;color:#374151;font-size:13px;line-height:1.85}ul,ol{margin-left:20px}li{margin:3pt 0;font-size:13px}table{border-collapse:collapse;width:100%;margin:10px 0;font-size:12px}th{background:#F3F4F6;font-weight:700;text-align:left}th,td{border:1px solid #E5E7EB;padding:6px 10px}hr{border:none;border-top:1px solid #E5E7EB;margin:14px 0}strong{font-weight:700}</style>${mdToHtml(m.minutes || m.transcript)}`;
+  pdfEl.innerHTML = `<style>h1{font-size:22px;font-weight:700;margin:0 0 16px}h2{font-size:16px;font-weight:700;margin:20px 0 8px;padding-bottom:6px;border-bottom:2px solid #E5E7EB}h3{font-size:14px;font-weight:600;margin:14px 0 6px;color:#374151}p{margin:4px 0;color:#374151;font-size:13px;line-height:1.85}ul,ol{margin-left:20px}li{margin:3px 0;font-size:13px}table{border-collapse:collapse;width:100%;margin:10px 0;font-size:12px}th{background:#F3F4F6;font-weight:700;text-align:left}th,td{border:1px solid #E5E7EB;padding:6px 10px}hr{border:none;border-top:1px solid #E5E7EB;margin:14px 0}strong{font-weight:700}</style>${mdToHtml(m.minutes || m.transcript)}`;
   pdfEl.style.display = 'block';
   try {
     const canvas = await html2canvas(pdfEl, { scale: 2, useCORS: true, logging: false, width: 794 });
