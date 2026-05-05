@@ -557,7 +557,7 @@ async function transcribeWithDeeepgram(blob, mimeType) {
     diarize: 'true',
     utterances: 'true',
     punctuate: 'true',
-    detect_language: 'true',
+    language: 'ko',
   });
 
   const arrayBuffer = await blob.arrayBuffer();
@@ -593,7 +593,12 @@ async function transcribeWithDeeepgram(blob, mimeType) {
 
   // 폴백: 단순 전사 텍스트
   const text = data.results?.channels?.[0]?.alternatives?.[0]?.transcript || '';
-  if (!text.trim()) throw new Error('음성에서 텍스트를 인식하지 못했습니다');
+  if (!text.trim()) {
+    // 영어도 시도 (한국어 감지 실패 방지용)
+    const altText = data.results?.channels?.[0]?.alternatives?.[0]?.words?.map(w => w.word).join(' ') || '';
+    if (altText.trim()) return altText.trim();
+    throw new Error('음성 인식 실패 — 마이크에 가까이서 말한 후 다시 시도해주세요');
+  }
   return text.trim();
 }
 
