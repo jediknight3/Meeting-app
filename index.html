@@ -303,7 +303,7 @@ const S = {
   mediaRecorder: null, audioChunks: [], stream: null,
   transcript: '', currentDuration: 0,
   currentMeeting: null, meetings: [],
-  dgToken: '', hfToken: '', viewMode: 'view',
+  dgToken: '', hfToken: '', dgSummary: '', viewMode: 'view',
 };
 
 function init() {
@@ -564,15 +564,15 @@ function updateStep(id, status, desc) {
   if (desc) { const d = document.getElementById(id + '-desc'); if (d) d.textContent = desc; }
 }
 
-// ── DEEPGRAM — 화자 분리 + 음성 전사 ─────────────────────
+// ── DEEPGRAM — 화자 분리 + 음성 전사 + AI 요약 ───────────
 async function transcribeWithDeeepgram(blob, mimeType) {
-  // Deepgram은 동기 응답 — 폴링 불필요, iOS Safari CORS 완전 지원
   const params = new URLSearchParams({
     model: 'nova-2',
     diarize: 'true',
     utterances: 'true',
     punctuate: 'true',
     language: 'ko',
+    summarize: 'v2',
   });
 
   const arrayBuffer = await blob.arrayBuffer();
@@ -593,6 +593,9 @@ async function transcribeWithDeeepgram(blob, mimeType) {
   }
 
   const data = await res.json();
+
+  // Deepgram AI 요약 저장 (회의록 생성에 사용)
+  S.dgSummary = data.results?.summary?.short || '';
 
   // utterances가 있으면 화자별 대화 형식으로 구성
   const utterances = data.results?.utterances;
@@ -623,15 +626,20 @@ async function generateMeetingMinutes(transcript) {
   const maxLen = 3500;
   const t = transcript.length > maxLen ? transcript.slice(0, maxLen) + '\n...(이하 생략)' : transcript;
 
-  // 1순위: jayden-finance GAS 프록시 (Anthropic Claude, CORS 없음)
+  // 1순위: Deepgram AI 요약 (전사와 동시에 반환, 추가 API 불필요)
+  if (S.dgSummary) {
+    return buildRichMinutes(t, today, S.dgSummary);
+  }
+
+  // 2순위: jayden-finance GAS 프록시 (Anthropic Claude)
   const gasUrl = localStorage.getItem('jf_gas') || '';
   if (gasUrl) {
     try {
       return await generateWithGAS(t, today, gasUrl);
-    } catch(e) { /* 다음 수단으로 폴백 */ }
+    } catch(e) { /* 폴백 */ }
   }
 
-  // 2순위: HuggingFace Mistral
+  // 3순위: HuggingFace Mistral
   if (S.hfToken) {
     try {
       return await generateWithHuggingFace(t, today);
@@ -744,6 +752,41 @@ ${transcript}
   const text = Array.isArray(data) ? data[0]?.generated_text : data.generated_text;
   if (!text?.trim()) throw new Error('AI 응답 없음');
   return text.trim();
+}
+
+function buildRichMinutes(transcript, today, summary) {
+  const lines = transcript.split('\n').filter(l => l.trim());
+  const speakers = new Set();
+  lines.forEach(l => { const m = l.match(/^(화자\d+):/); if (m) speakers.add(m[1]); });
+  const spkList = [...speakers].join(', ') || '미상';
+
+  return `# 회의록
+
+## 📋 기본 정보
+- **날짜**: ${today}
+- **참석자**: ${spkList} (${speakers.size}명)
+- **주제**: 회의 내용 참조
+
+## 📝 회의 요약
+${summary}
+
+## 💬 주요 논의사항
+- 아래 전체 녹취록 참조
+
+## ✅ 결정사항
+- 직접 작성해주세요
+
+## 📌 액션아이템
+| 담당자 | 내용 | 기한 |
+|--------|------|------|
+| | | |
+
+## 🗣️ 전체 대화 녹취록
+
+${transcript}
+
+---
+*Meeting Minutes App · ${today}*`;
 }
 
 function buildTemplateMinutes(transcript, today) {
