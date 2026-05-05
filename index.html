@@ -731,31 +731,19 @@ function saveSettings() {
   if (!dg && !hf) { showToast('API 키를 입력해주세요'); return; }
   showToast('저장되었습니다 ✓');
 }
-async function testToken() {
+function testToken() {
   const token = document.getElementById('set-dg-token').value.trim();
-  if (!token) { showToast('Deepgram API 키를 먼저 입력하세요'); return; }
+  if (!token) { showToast('API 키를 먼저 입력하세요'); return; }
   const el = document.getElementById('token-test-result');
   el.style.display = 'block';
-  el.style.background = 'var(--gray-100)'; el.style.color = 'var(--gray-700)';
-  el.textContent = '🔍 테스트 중...';
-  try {
-    const res = await fetch('https://api.deepgram.com/v1/projects', {
-      headers: { 'Authorization': `Token ${token}` }
-    });
-    if (res.ok) {
-      el.style.background = 'var(--green-l)'; el.style.color = '#065F46';
-      el.textContent = '✅ API 키 정상! 저장 버튼을 눌러주세요.';
-      S.dgToken = token; localStorage.setItem('ma_dg_token', token);
-    } else if (res.status === 401) {
-      el.style.background = 'var(--red-l)'; el.style.color = '#991B1B';
-      el.textContent = '❌ API 키가 잘못됐습니다. deepgram.com 대시보드에서 확인해주세요.';
-    } else {
-      el.style.background = 'var(--orange-l)'; el.style.color = '#92400E';
-      el.textContent = '⚠️ HTTP ' + res.status + ' — 잠시 후 다시 시도해주세요';
-    }
-  } catch (err) {
-    el.style.background = 'var(--orange-l)'; el.style.color = '#92400E';
-    el.textContent = '⚠️ 네트워크 오류: ' + err.message;
+  // 형식만 검증 (iOS CORS로 인해 관리 API 직접 호출 불가, 녹음 API는 정상 작동)
+  if (token.length >= 20) {
+    el.style.background = 'var(--green-l)'; el.style.color = '#065F46';
+    el.textContent = '✅ 형식 확인 완료 — 자동 저장됐습니다. 녹음 탭에서 바로 시작해보세요!';
+    S.dgToken = token; localStorage.setItem('ma_dg_token', token);
+  } else {
+    el.style.background = 'var(--red-l)'; el.style.color = '#991B1B';
+    el.textContent = '❌ API 키가 너무 짧습니다. deepgram.com 대시보드에서 다시 복사해주세요.';
   }
 }
 function updateSettingsCount() {
