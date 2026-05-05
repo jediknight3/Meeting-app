@@ -843,10 +843,12 @@ function renderView() {
   } else {
     const title = extractTitle(content);
     const isTemplate = content.includes('HuggingFace 토큰') || content.includes('아래 녹취록을 참조');
-    const aiBtn = S.hfToken
+    const gasUrl = localStorage.getItem('jf_gas') || '';
+    const canAI = S.hfToken || gasUrl;
+    const aiBtn = canAI
       ? `<button class="btn btn-primary btn-full" style="margin-bottom:14px" id="view-ai-btn" onclick="regenAIMinutes('${m.id}')">✨ AI 회의록 생성</button>`
       : isTemplate
-        ? `<div class="alert alert-orange" style="margin-bottom:14px">💡 설정에서 HuggingFace 토큰을 입력하면 AI가 회의록을 자동 작성합니다</div>`
+        ? `<div class="alert alert-orange" style="margin-bottom:14px">💡 jayden-finance GAS URL 또는 HuggingFace 토큰을 설정에서 입력해주세요</div>`
         : '';
     el.innerHTML = `
       <div class="tab-group">
