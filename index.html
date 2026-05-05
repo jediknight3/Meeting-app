@@ -263,11 +263,16 @@ html, body {
       </div>
 
       <div class="setting-section">
-        <div class="section-label">데이터</div>
+        <div class="section-label">데이터 이전 / 백업</div>
         <div class="setting-card">
           <div class="setting-row">
             <label>저장된 회의록</label>
             <p id="meetings-count" style="font-size:14px;color:var(--sub);margin-bottom:10px"></p>
+            <div style="display:flex;gap:8px;margin-bottom:8px">
+              <button class="btn btn-outline" style="flex:1" onclick="exportAllMeetings()">📤 내보내기</button>
+              <button class="btn btn-outline" style="flex:1" onclick="importMeetings()">📥 가져오기</button>
+            </div>
+            <div class="setting-hint" style="margin-bottom:10px">내보내기로 JSON 파일 저장 → 다른 기기/브라우저에서 가져오기</div>
             <button class="btn btn-outline btn-full" style="color:var(--red);border-color:var(--red)" onclick="clearAll()">🗑️ 모든 회의록 삭제</button>
           </div>
         </div>
@@ -822,6 +827,28 @@ function clearAll() {
   if (!confirm('모든 회의록을 삭제하시겠습니까?')) return;
   S.meetings = []; saveMeetingsData(); updateSettingsCount(); renderHome();
   showToast('삭제되었습니다');
+}
+function exportAllMeetings() {
+  if (!S.meetings.length) { showToast('저장된 회의록이 없습니다'); return; }
+  const json = JSON.stringify({ meetings: S.meetings, exportedAt: new Date().toISOString(), v: 1 }, null, 2);
+  dlBlob(new Blob([json], {type:'application/json'}), '회의록_백업_' + new Date().toLocaleDateString('ko-KR').replace(/\. /g,'-').replace('.','') + '.json');
+  showToast('백업 파일 저장됨');
+}
+function importMeetings() {
+  const input = Object.assign(document.createElement('input'), { type:'file', accept:'.json' });
+  input.onchange = async e => {
+    const file = e.target.files[0]; if (!file) return;
+    try {
+      const data = JSON.parse(await file.text());
+      if (!Array.isArray(data.meetings)) throw new Error('형식 오류');
+      const ids = new Set(S.meetings.map(m => m.id));
+      const added = data.meetings.filter(m => !ids.has(m.id));
+      S.meetings = [...S.meetings, ...added];
+      saveMeetingsData(); updateSettingsCount(); renderHome();
+      showToast(`${added.length}개 회의록 가져옴`);
+    } catch(e) { showToast('가져오기 실패: ' + e.message); }
+  };
+  document.body.appendChild(input); input.click(); document.body.removeChild(input);
 }
 
 // ── VIEW ──────────────────────────────────────────────────
