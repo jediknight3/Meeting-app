@@ -267,7 +267,6 @@ html, body {
     <!-- SETTINGS -->
     <div id="page-settings" class="page">
       <div class="alert alert-green">✅ 완전 무료! Gemini API 키 1개만 있으면 됩니다.</div>
-      <div class="alert alert-warn">⚠️ 키 발급 시 <strong>aistudio.google.com</strong>에서만 발급하세요. Google Cloud Console에서 발급하면 무료 한도가 0이 됩니다.</div>
       <div class="alert alert-info">🤖 Gemini가 여러 화자를 자동으로 인식해 대화 형식으로 전사합니다.</div>
 
       <div class="setting-section">
@@ -277,16 +276,21 @@ html, body {
             <label>🔑 Google Gemini API Key</label>
             <input type="password" id="set-gemini" placeholder="AIza..." autocomplete="off" spellcheck="false">
             <div class="setting-hint">
-              <strong>발급 방법 (반드시 이 순서대로):</strong><br>
-              1. <strong>aistudio.google.com</strong> 접속 (Google Cloud 아님)<br>
-              2. 왼쪽 메뉴 → <strong>Get API key</strong><br>
-              3. <strong>Create API key in new project</strong> 클릭<br>
-              4. 생성된 AIza... 키를 여기에 입력<br><br>
-              무료: 분당 15회, 하루 1,500회
+              <strong style="color:#DC2626">⚠️ 할당량 초과 에러가 나면 키를 새로 발급하세요:</strong><br><br>
+              <strong>① aistudio.google.com 접속</strong> (반드시 이 주소, Google Cloud 아님)<br>
+              <strong>② 왼쪽 Get API key 클릭</strong><br>
+              <strong>③ Create API key → "새 프로젝트에서 만들기"</strong> 선택<br>
+              <strong>④ AIza로 시작하는 키 복사 → 여기에 붙여넣기</strong><br><br>
+              무료 한도: 분당 15회, 하루 1,500회<br>
+              ※ Google Cloud Console에서 만든 키는 한도가 0입니다
             </div>
           </div>
         </div>
-        <button class="btn btn-primary btn-full" onclick="saveSettings()" style="margin-top:4px">저장</button>
+        <div style="display:flex;gap:8px;margin-top:4px">
+          <button class="btn btn-primary" style="flex:1" onclick="saveSettings()">저장</button>
+          <button class="btn btn-outline" onclick="testApiKey()">🔍 키 테스트</button>
+        </div>
+        <div id="key-test-result" style="display:none;margin-top:10px;padding:10px 12px;border-radius:var(--radius-m);font-size:13px"></div>
       </div>
 
       <div class="setting-section">
@@ -677,29 +681,43 @@ ${transcript}`;
 }
 
 // ════════════════════════════════════════
-// GEMINI API — 공통 호출
+// GEMINI API — 공통 호출 (모델 자동 fallback)
 // ════════════════════════════════════════
+const GEMINI_MODELS = [
+  'gemini-2.0-flash',
+  'gemini-1.5-flash-latest',
+  'gemini-1.5-flash-8b',
+];
+
 async function callGemini(parts, config = {}) {
-  const body = {
-    contents: [{ parts }],
-    generationConfig: config,
-  };
-  const res = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${S.geminiKey}`,
-    { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }
-  );
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({}));
-    const msg = err.error?.message || '';
-    if (msg.includes('quota') || msg.includes('RESOURCE_EXHAUSTED')) {
-      throw new Error('API 할당량 초과. 설정의 API 키 발급 방법을 확인하고 새 키를 발급하세요.');
+  const body = { contents: [{ parts }], generationConfig: config };
+  let lastErr = '';
+
+  for (const model of GEMINI_MODELS) {
+    const res = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${S.geminiKey}`,
+      { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }
+    );
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      const msg = err.error?.message || 'HTTP ' + res.status;
+      if (msg.includes('quota') || msg.includes('RESOURCE_EXHAUSTED') || msg.includes('limit')) {
+        lastErr = 'quota';
+        continue; // 다음 모델 시도
+      }
+      throw new Error(msg);
     }
-    throw new Error(msg || 'Gemini HTTP ' + res.status);
+    const data = await res.json();
+    const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+    if (!text) throw new Error('Gemini 응답이 비어 있습니다');
+    return text;
   }
-  const data = await res.json();
-  const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-  if (!text) throw new Error('Gemini 응답이 비어 있습니다');
-  return text;
+
+  // 모든 모델 실패
+  if (lastErr === 'quota') {
+    throw new Error('API 할당량 초과 — 설정 탭에서 새 API 키 발급 방법을 확인하세요');
+  }
+  throw new Error('Gemini API 호출 실패');
 }
 
 function blobToBase64(blob) {
@@ -809,6 +827,7 @@ function confirmDelete(id) {
 // ════════════════════════════════════════
 function renderSettings() {
   document.getElementById('set-gemini').value = S.geminiKey;
+  document.getElementById('key-test-result').style.display = 'none';
   updateSettingsCount();
 }
 function saveSettings() {
@@ -817,6 +836,53 @@ function saveSettings() {
   S.geminiKey = key;
   localStorage.setItem('ma_gemini', key);
   showToast('저장되었습니다 ✓');
+}
+async function testApiKey() {
+  const key = document.getElementById('set-gemini').value.trim();
+  if (!key) { showToast('키를 먼저 입력하세요'); return; }
+  const resultEl = document.getElementById('key-test-result');
+  resultEl.style.display = 'block';
+  resultEl.style.background = 'var(--gray-100)';
+  resultEl.style.color = 'var(--gray-700)';
+  resultEl.textContent = '🔍 테스트 중...';
+
+  try {
+    const res = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${key}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ contents: [{ parts: [{ text: '안녕' }] }] }),
+      }
+    );
+    const data = await res.json();
+    if (!res.ok) {
+      const msg = data.error?.message || '';
+      if (msg.includes('quota') || msg.includes('RESOURCE_EXHAUSTED') || msg.includes('limit')) {
+        resultEl.style.background = 'var(--red-l)';
+        resultEl.style.color = '#991B1B';
+        resultEl.innerHTML = '❌ 할당량 초과 (limit: 0)<br>aistudio.google.com에서 <strong>새 프로젝트</strong>로 키를 다시 발급하세요.';
+      } else if (msg.includes('API_KEY_INVALID') || msg.includes('invalid')) {
+        resultEl.style.background = 'var(--red-l)';
+        resultEl.style.color = '#991B1B';
+        resultEl.textContent = '❌ 잘못된 API 키입니다.';
+      } else {
+        resultEl.style.background = 'var(--orange-l)';
+        resultEl.style.color = '#92400E';
+        resultEl.textContent = '⚠️ 오류: ' + (msg || 'HTTP ' + res.status);
+      }
+    } else {
+      resultEl.style.background = 'var(--green-l)';
+      resultEl.style.color = '#065F46';
+      resultEl.textContent = '✅ API 키 정상 작동! 이 키를 저장하세요.';
+      S.geminiKey = key;
+      localStorage.setItem('ma_gemini', key);
+    }
+  } catch (err) {
+    resultEl.style.background = 'var(--orange-l)';
+    resultEl.style.color = '#92400E';
+    resultEl.textContent = '⚠️ 네트워크 오류: ' + err.message;
+  }
 }
 function updateSettingsCount() {
   const el = document.getElementById('meetings-count');
